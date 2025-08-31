@@ -1,0 +1,34 @@
+# Instructions
+
+- It's a Portfolio Project.
+- The project is built using ASP.NET WebForms.
+- This folder contains WebForm (.aspx) pages for the project.
+- Each page is designed to handle specific functionalities such as user registration, login, profile management,
+  and other interactive features.
+- The pages are built using the ASP.NET WebForms framework, which allows for rapid development of dynamic web applications.
+- Ensure that each page is properly linked to the corresponding backend logic in the code-behind files (.aspx.cs).
+- Follow best practices for web development, including security measures, responsive design, and user experience.
+- Regularly update the pages to incorporate new features and improvements based on user feedback and technological advancements.
+- Everything must be very responsive and mobile-friendly, and also for all screen sizes.
+- For Frontend functionality, I want to use pure JavaScript from (../Scripts/*.js).
+- And, for styling, I want to use pure CSS from (../Styles/*.js).
+- Backend will be handled by C# in code-behind files (.aspx.cs).
+- I also need an Admin Panel for managing the website content and user data.
+- The Admin Panel should have functionalities like user management, content management, and analytics.
+- Ensure that the Admin Panel is secure and only accessible to authorized personnel.
+- Implement a consistent layout and design across all pages to maintain a cohesive look and feel.
+- Use master pages or user controls to reuse common elements like headers, footers, and navigation menus.
+- Optimize the pages for performance, ensuring fast load times and efficient resource usage.
+- Test the pages across different browsers and devices to ensure compatibility and a seamless user experience.
+- User will be able to contact via a contact form. The form should include fields for name, email, subject, and message. And, the admin will be able to reply to the user's message from the Admin Dashboard.
+- The admin dashboard should have a section to view all messages received from users through the contact form.
+- Implement a blog section where the admin can create, edit, and delete newly published projects and ideas for showing on the homepage.
+- Make sure to include proper validation and error handling on all pages.
+- The homepage (../Default.aspx) must have a hero section. Then, from the navigation bar, the user can navigate to other pages.
+- The navigation bar should include links to Home, Projects, Contact, and About
+- There should be a way for the user to download my resume from the homepage. The resume will be in PDF format and stored in the root directory.
+- The Projects page should showcase various projects with images, descriptions, and links to live demos or source code repositories.
+- The Contact page should include the contact form and also display my contact information (email, phone number, social media links).
+- The About page should provide a brief biography, skills, and experience.
+- Ensure that all pages are SEO-friendly with appropriate meta tags, titles, and descriptions.
+- Implement analytics tracking to monitor user behavior and page performance.
