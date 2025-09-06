@@ -1,1 +1,0 @@
-# It contains static files and images.

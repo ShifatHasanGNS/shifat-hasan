@@ -7,47 +7,43 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace shifat_hasan
+namespace shifat_hasan.Pages
 {
 
 
-    public partial class Site
+    public partial class Home
     {
 
         /// <summary>
-        /// head control.
+        /// FeatureProjectsRepeater control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
+        protected global::System.Web.UI.WebControls.Repeater FeatureProjectsRepeater;
 
         /// <summary>
-        /// form1 control.
+        /// FeatureProjectsJsonData control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.HiddenField FeatureProjectsJsonData;
 
         /// <summary>
-        /// ContentPlaceHolder1 control.
+        /// Master property.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Auto-generated property.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
-
-        /// <summary>
-        /// ScriptManager1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        public new shifat_hasan.Site Master
+        {
+            get
+            {
+                return ((shifat_hasan.Site)(base.Master));
+            }
+        }
     }
 }
