@@ -13,7 +13,6 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             if (!IsPostBack)
             {
                 LoadShowcaseData();
-                UpdateStatistics();
             }
         }
 
@@ -30,22 +29,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                 LiteralMessage.Text = "Error loading projects: " + ex.Message;
             }
         }
-
-        private void UpdateStatistics()
-        {
-            try
-            {
-                var stats = GetShowcaseStatistics();
-                LiteralTotalProjects.Text = stats.TotalProjects.ToString();
-                // LiteralProjectTypes.Text = stats.UniqueTypes.ToString();
-                LiteralWithLinks.Text = stats.ProjectsWithLinks.ToString();
-            }
-            catch (Exception ex)
-            {
-                LiteralMessage.Text = "Error loading statistics: " + ex.Message;
-            }
-        }
-
+        
         // Search functionality
         protected void btnSearch_Click(object sender, EventArgs e)
         {
@@ -62,39 +46,47 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         }
 
         // Load project for editing
-        protected void btnLoadProject_Click(object sender, EventArgs e)
+        protected void btnLoadProjectForEdit_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(txtLoadProjectId.Text.Trim(), out int projectId))
+            try
             {
-                try
+                string projectIdStr = hfEditProjectId.Value;
+        
+                if (string.IsNullOrEmpty(projectIdStr))
                 {
-                    ShowcaseModel project = GetProjectById(projectId);
-                    if (project != null)
-                    {
-                        PopulateEditForm(project);
-                        hfEditProjectId.Value = projectId.ToString();
-                        LiteralMessage.Text = "Project loaded successfully!";
-
-                        // Show edit form via JavaScript
-                        ClientScript.RegisterStartupScript(this.GetType(), "showEditForm",
-                            "document.getElementById('editForm').style.display = 'block';", true);
-                    }
-                    else
-                    {
-                        LiteralMessage.Text = "Project not found with ID: " + projectId;
-                    }
+                    LiteralMessage.Text = "No project ID provided.";
+                    return;
                 }
-                catch (Exception ex)
+        
+                if (!int.TryParse(projectIdStr, out int projectId))
                 {
-                    LiteralMessage.Text = "Error loading project: " + ex.Message;
+                    LiteralMessage.Text = "Invalid project ID.";
+                    return;
+                }
+
+                ShowcaseModel project = GetProjectById(projectId);
+                if (project != null)
+                {
+                    PopulateEditForm(project);
+            
+                    // Show edit modal - using a more reliable method
+                    ScriptManager.RegisterStartupScript(this, GetType(), "showEditModal", 
+                        "setTimeout(function() { document.getElementById('editFormModal').style.display = 'block'; }, 100);", true);
+                }
+                else
+                {
+                    LiteralMessage.Text = "Project not found with ID: " + projectId;
+                    // Clear the hidden field
+                    hfEditProjectId.Value = "";
                 }
             }
-            else
+            catch (Exception ex)
             {
-                LiteralMessage.Text = "Please enter a valid Project ID.";
+                LiteralMessage.Text = "Error loading project: " + ex.Message;
+                hfEditProjectId.Value = ""; // Clear on error
             }
         }
-
+        
         // Add new project
         protected void btnAddProject_Click(object sender, EventArgs e)
         {
@@ -119,7 +111,6 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                     {
                         ClearAddForm();
                         LoadShowcaseData();
-                        UpdateStatistics();
                         LiteralMessage.Text = $"Project added successfully! New Project ID: {newId}";
 
                         // Switch to gallery tab to show the new project
@@ -164,12 +155,11 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                     if (success)
                     {
                         LoadShowcaseData();
-                        UpdateStatistics();
                         LiteralMessage.Text = "Project updated successfully!";
 
-                        // Switch to gallery tab
-                        ClientScript.RegisterStartupScript(this.GetType(), "switchToGalleryAfterUpdate",
-                            "setTimeout(function() { showTab('gallery'); cancelEdit(); }, 500);", true);
+                        // Close modal and refresh
+                        ClientScript.RegisterStartupScript(this.GetType(), "closeModalAfterUpdate",
+                            "closeEditModal(); setTimeout(function() { window.location.reload(); }, 500);", true);
                     }
                     else
                     {
@@ -200,12 +190,11 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                     if (success)
                     {
                         LoadShowcaseData();
-                        UpdateStatistics();
                         LiteralMessage.Text = "Project deleted successfully!";
 
-                        // Clear form and switch to gallery
+                        // Close modal if open and refresh the page
                         ClientScript.RegisterStartupScript(this.GetType(), "afterDelete",
-                            "setTimeout(function() { showTab('gallery'); cancelEdit(); }, 500);", true);
+                            "closeEditModal(); setTimeout(function() { window.location.reload(); }, 500);", true);
                     }
                     else
                     {
@@ -256,14 +245,17 @@ namespace shifat_hasan.Pages.Admin.Dashboard
 
         private void PopulateEditForm(ShowcaseModel project)
         {
-            ddlEditType.SelectedValue = project.Type;
-            txtEditTitle.Text = project.Title;
-            txtEditDescription.Text = project.Description;
-            txtEditCoverImage.Text = project.UrlCoverImage;
-            txtEditGithub.Text = project.UrlGithub;
-            txtEditDrive.Text = project.UrlDrive;
-            txtEditYoutube.Text = project.UrlYoutube;
-            txtEditOther.Text = project.UrlOther;
+            // Set dropdown selection
+            ddlEditType.SelectedValue = project.Type ?? "";
+    
+            // Populate text fields with existing values (empty string if null)
+            txtEditTitle.Text = project.Title ?? "";
+            txtEditDescription.Text = project.Description ?? "";
+            txtEditCoverImage.Text = project.UrlCoverImage ?? "";
+            txtEditGithub.Text = project.UrlGithub ?? "";
+            txtEditDrive.Text = project.UrlDrive ?? "";
+            txtEditYoutube.Text = project.UrlYoutube ?? "";
+            txtEditOther.Text = project.UrlOther ?? "";
         }
 
         private void ClearAddForm()
@@ -342,8 +334,8 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"SELECT id, type, title, description, url_cover_image, 
-                               url_github, url_drive, url_youtube, url_other 
-                               FROM showcase WHERE id = @id";
+                       url_github, url_drive, url_youtube, url_other 
+                       FROM showcase WHERE id = @id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -356,7 +348,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                         {
                             project = new ShowcaseModel
                             {
-                                Id = reader.GetInt32(Convert.ToInt32("id")),
+                                Id = Convert.ToInt32(reader["id"]),
                                 Type = reader["type"]?.ToString() ?? "",
                                 Title = reader["title"]?.ToString() ?? "",
                                 Description = reader["description"]?.ToString() ?? "",
@@ -373,7 +365,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
 
             return project;
         }
-
+        
         private int AddProjectToDatabase(ShowcaseModel project)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
@@ -450,45 +442,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             command.Parameters.AddWithValue("@youtube", project.UrlYoutube ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("@other", project.UrlOther ?? (object)DBNull.Value);
         }
-
-        private ShowcaseStatistics GetShowcaseStatistics()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            ShowcaseStatistics stats = new ShowcaseStatistics();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                // Total projects
-                string countQuery = "SELECT COUNT(*) FROM showcase";
-                using (SqlCommand command = new SqlCommand(countQuery, connection))
-                {
-                    stats.TotalProjects = (int)command.ExecuteScalar();
-                }
-
-                // Unique types
-                string typesQuery = "SELECT COUNT(DISTINCT type) FROM showcase";
-                using (SqlCommand command = new SqlCommand(typesQuery, connection))
-                {
-                    stats.UniqueTypes = (int)command.ExecuteScalar();
-                }
-
-                // Projects with external links
-                string linksQuery = @"SELECT COUNT(*) FROM showcase 
-                                    WHERE url_github IS NOT NULL AND url_github != '' 
-                                    OR url_drive IS NOT NULL AND url_drive != ''
-                                    OR url_youtube IS NOT NULL AND url_youtube != ''
-                                    OR url_other IS NOT NULL AND url_other != ''";
-                using (SqlCommand command = new SqlCommand(linksQuery, connection))
-                {
-                    stats.ProjectsWithLinks = (int)command.ExecuteScalar();
-                }
-            }
-
-            return stats;
-        }
-
+        
         // Helper methods for display formatting
         protected string TruncateText(string text, int maxLength)
         {
@@ -567,12 +521,5 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         public string url_drive => UrlDrive;
         public string url_youtube => UrlYoutube;
         public string url_other => UrlOther;
-    }
-
-    public class ShowcaseStatistics
-    {
-        public int TotalProjects { get; set; }
-        public int UniqueTypes { get; set; }
-        public int ProjectsWithLinks { get; set; }
     }
 }

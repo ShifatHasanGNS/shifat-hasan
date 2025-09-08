@@ -21,6 +21,16 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                 LoadStatistics();
             }
         }
+        
+        protected string GetReplyText(object adminMessageBody, object userName)
+        {
+            if (!string.IsNullOrEmpty(adminMessageBody?.ToString()))
+            {
+                return adminMessageBody.ToString();
+            }
+    
+            return $"Dear {userName},\n\nThank you for contacting us. We have received your message and appreciate your feedback.\n\n[Your response here]\n\nBest regards,\nAdmin Team";
+        }
 
         #region Data Loading Methods
 

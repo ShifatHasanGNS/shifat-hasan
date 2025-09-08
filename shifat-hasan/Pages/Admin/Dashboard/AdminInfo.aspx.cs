@@ -7,14 +7,83 @@ namespace shifat_hasan.Pages.Admin.Dashboard
 {
     public partial class AdminInfo : Page
     {
+        private bool IsEditMode
+        {
+            get => ViewState["IsEditMode"] as bool? ?? false;
+            set => ViewState["IsEditMode"] = value;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             // Check authentication first
             RequireAuthentication();
 
-            if (IsPostBack) return;
-            LoadAdminInfo();
-            LoadSessionInfo();
+            if (!IsPostBack)
+            {
+                LoadAdminInfo();
+                LoadSessionInfo();
+            }
+
+            // Handle the view mode on postback
+            SetViewMode();
+        }
+
+        private void SetViewMode()
+        {
+            if (IsEditMode)
+            {
+                displayMode.Style["display"] = "none";
+                editMode.Style["display"] = "block";
+                btnToggleEdit.Text = "View";
+            }
+            else
+            {
+                displayMode.Style["display"] = "block";
+                editMode.Style["display"] = "none";
+                btnToggleEdit.Text = "Edit";
+            }
+        }
+
+        protected void btnToggleEdit_Click(object sender, EventArgs e)
+        {
+            if (IsEditMode)
+            {
+                // Switch to view mode
+                IsEditMode = false;
+            }
+            else
+            {
+                // Switch to edit mode and populate fields
+                IsEditMode = true;
+                LoadEditFields();
+            }
+
+            LiteralMessage.Text = "";
+
+            SetViewMode();
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            IsEditMode = false;
+            SetViewMode();
+            LiteralMessage.Text = "";
+        }
+
+        private void LoadEditFields()
+        {
+            try
+            {
+                var admin = GetAdminFromDatabase();
+                if (admin != null)
+                {
+                    PopulateEditFields(admin);
+                }
+            }
+            catch (Exception ex)
+            {
+                LiteralMessage.Text = "Error loading data for editing: " + Server.HtmlEncode(ex.Message);
+            }
         }
 
         private void RequireAuthentication()
@@ -43,7 +112,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             }
             catch (Exception)
             {
-                // If there's any issue with session data, consider it expired
+                Console.WriteLine("Error checking session expiration.");
                 return true;
             }
         }
@@ -156,6 +225,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
 
         private void PopulateEditFields(AdminModel admin)
         {
+            // Use null coalescing operator to ensure empty string instead of null
             txtName.Text = admin.Name ?? "";
             txtCountry.Text = admin.Country ?? "";
             txtEmail.Text = admin.Email ?? "";
@@ -254,6 +324,8 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                 if (success)
                 {
                     LoadAdminInfo(); // Refresh display
+                    IsEditMode = false; // Switch back to view mode
+                    SetViewMode();
                     LiteralMessage.Text = "Admin information saved successfully!";
                 }
                 else
@@ -267,29 +339,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             }
         }
 
-        protected void btnEdit_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Reload admin info to ensure edit fields are populated with current data
-                var admin = GetAdminFromDatabase();
-                if (admin != null)
-                {
-                    PopulateEditFields(admin);
-                    LiteralMessage.Text = "Ready to edit admin information.";
-                }
-                else
-                {
-                    LiteralMessage.Text = "No admin information found to edit.";
-                }
-            }
-            catch (Exception ex)
-            {
-                LiteralMessage.Text = "Error loading admin information for editing: " + Server.HtmlEncode(ex.Message);
-            }
-        }
-
-        private bool IsValidEmail(string email)
+        private static bool IsValidEmail(string email)
         {
             try
             {
@@ -334,17 +384,19 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                 admin.SignedInCount = Convert.ToInt32(reader["signed_in_count"]);
             }
 
-            // Handle string fields safely
-            admin.Name = reader["name"]?.ToString();
-            admin.Country = reader["country"]?.ToString();
-            admin.University = reader["university"]?.ToString();
-            admin.CurrentInstitution = reader["current_institution"]?.ToString();
-            admin.Email = reader["email"]?.ToString();
-            admin.Github = reader["github"]?.ToString();
-            admin.LinkedIn = reader["linkedin"]?.ToString();
-            admin.Facebook = reader["facebook"]?.ToString();
-            admin.Instagram = reader["instagram"]?.ToString();
-            admin.Youtube = reader["youtube"]?.ToString();
+            // Handle string fields safely - Convert DBNull to empty string, not null
+            admin.Name = reader["name"] == DBNull.Value ? "" : reader["name"]?.ToString() ?? "";
+            admin.Country = reader["country"] == DBNull.Value ? "" : reader["country"]?.ToString() ?? "";
+            admin.University = reader["university"] == DBNull.Value ? "" : reader["university"]?.ToString() ?? "";
+            admin.CurrentInstitution = reader["current_institution"] == DBNull.Value
+                ? ""
+                : reader["current_institution"]?.ToString() ?? "";
+            admin.Email = reader["email"] == DBNull.Value ? "" : reader["email"]?.ToString() ?? "";
+            admin.Github = reader["github"] == DBNull.Value ? "" : reader["github"]?.ToString() ?? "";
+            admin.LinkedIn = reader["linkedin"] == DBNull.Value ? "" : reader["linkedin"]?.ToString() ?? "";
+            admin.Facebook = reader["facebook"] == DBNull.Value ? "" : reader["facebook"]?.ToString() ?? "";
+            admin.Instagram = reader["instagram"] == DBNull.Value ? "" : reader["instagram"]?.ToString() ?? "";
+            admin.Youtube = reader["youtube"] == DBNull.Value ? "" : reader["youtube"]?.ToString() ?? "";
 
             return admin;
         }
@@ -435,5 +487,18 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         public string Facebook { get; set; }
         public string Instagram { get; set; }
         public string Youtube { get; set; }
+
+        public bool is_signed_in => IsSignedIn;
+        public int signed_in_count => SignedInCount;
+        public string name => Name;
+        public string country => Country;
+        public string university => University;
+        public string current_institution => CurrentInstitution;
+        public string email => Email;
+        public string github => Github;
+        public string linkedin => LinkedIn;
+        public string facebook => Facebook;
+        public string instagram => Instagram;
+        public string youtube => Youtube;
     }
 }

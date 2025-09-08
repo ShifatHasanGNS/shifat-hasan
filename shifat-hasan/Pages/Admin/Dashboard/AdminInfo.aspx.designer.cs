@@ -33,6 +33,15 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         protected global::System.Web.UI.WebControls.Button btnSignOut;
 
         /// <summary>
+        /// btnToggleEdit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnToggleEdit;
+
+        /// <summary>
         /// LiteralStatus control.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,15 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal LiteralSessionInfo;
+
+        /// <summary>
+        /// displayMode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl displayMode;
 
         /// <summary>
         /// DisplayName control.
@@ -168,6 +186,15 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         protected global::System.Web.UI.WebControls.Literal DisplaySignInCount;
 
         /// <summary>
+        /// editMode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl editMode;
+
+        /// <summary>
         /// txtName control.
         /// </summary>
         /// <remarks>
@@ -265,5 +292,23 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSave;
+
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancel;
+
+        /// <summary>
+        /// hiddenEditMode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hiddenEditMode;
     }
 }

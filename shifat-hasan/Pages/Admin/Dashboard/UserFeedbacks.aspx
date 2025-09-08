@@ -1,9 +1,13 @@
-<%@ Page Language="C#" CodeBehind="~/Pages/Admin/Dashboard/UserFeedbacks.aspx.cs" Inherits="shifat_hasan.Pages.Admin.Dashboard.UserFeedbacks" %>
+<%@ Page Language="C#" CodeBehind="~/Pages/Admin/Dashboard/UserFeedbacks.aspx.cs"
+    Inherits="shifat_hasan.Pages.Admin.Dashboard.UserFeedbacks" ResponseEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html>
 <head runat="server">
     <title>User Feedback Management</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
         * {
             margin: 0;
@@ -11,25 +15,273 @@
             box-sizing: border-box;
         }
 
+        :root {
+            /* Dark Theme Slate Color Palette */
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+
+            /* Accent Colors */
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-error: #ef4444;
+
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            --gradient-dark: linear-gradient(135deg, var(--slate-800), var(--slate-900));
+            --gradient-card: linear-gradient(135deg, var(--slate-800), var(--slate-700));
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+            /* Transitions */
+            --transition-fast: 0.15s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+            --transition-slow: 0.5s ease-in-out;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gradient-dark);
             min-height: 100vh;
             padding: 20px;
+            color: var(--slate-100);
+        }
+        
+        .header-title {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        
+        .header-title-main {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: var(--gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header-title-sub {
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            font-weight: 400;
+            margin-top: -2px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: var(--gradient-card);
             border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-2xl);
             overflow: hidden;
+            border: 1px solid var(--slate-700);
+            margin-top: 6rem;
+            /* Account for fixed navigation */
+        }
+
+        /* Modern Admin Navigation - Matching Home Page Style */
+        .admin-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+            padding: 0;
+        }
+
+        .admin-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            height: 70px;
+            width: 100%;
+        }
+
+        .admin-nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .admin-nav-link {
+            text-decoration: none;
+            color: var(--slate-300);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-link-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-link-underline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition-normal);
+        }
+
+        .admin-nav-link:hover {
+            color: var(--accent-primary);
+        }
+
+        .admin-nav-link:hover .admin-link-underline {
+            transform: scaleX(1);
+        }
+
+        .admin-nav-link.active {
+            color: var(--accent-primary);
+        }
+
+        .admin-nav-link.active .admin-link-underline {
+            transform: scaleX(1);
+        }
+
+        .admin-nav-link span {
+            font-size: 1rem;
+            filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.3));
+        }
+
+        /* Mobile Menu Toggle */
+        .admin-mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease-in-out;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .admin-hamburger-line {
+            width: 24px;
+            height: 2px;
+            background: var(--slate-300);
+            transition: var(--transition-normal);
+            transform-origin: center;
+        }
+
+        .admin-mobile-menu-toggle:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .admin-mobile-menu-toggle.active .admin-hamburger-line:first-child {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .admin-mobile-menu-toggle.active .admin-hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .admin-mobile-menu-toggle.active .admin-hamburger-line:last-child {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Navigation */
+        .admin-mobile-nav {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            z-index: 1001;
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .admin-mobile-nav.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .admin-mobile-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            color: var(--slate-300);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            transition: var(--transition-normal);
+        }
+
+        .admin-mobile-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .admin-mobile-link.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+        }
+
+        .admin-mobile-link span {
+            font-size: 1.1rem;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--gradient-primary);
+            color: var(--slate-100);
             padding: 30px;
             text-align: center;
         }
@@ -38,17 +290,19 @@
             font-size: 2.5rem;
             margin-bottom: 10px;
             font-weight: 600;
+            color: var(--slate-100);
         }
 
         .header p {
             font-size: 1.1rem;
             opacity: 0.9;
+            color: var(--slate-300);
         }
 
         .search-section {
             padding: 20px 30px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
+            background: var(--slate-800);
+            border-bottom: 1px solid var(--slate-700);
         }
 
         .search-container {
@@ -62,16 +316,18 @@
             flex: 1;
             min-width: 300px;
             padding: 12px 16px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--slate-600);
             border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s ease;
+            transition: var(--transition-fast);
+            background: var(--slate-800);
+            color: var(--slate-100);
         }
 
         .search-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .btn {
@@ -81,53 +337,75 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition-fast);
             text-decoration: none;
             display: inline-block;
         }
 
+        .btn:focus-visible {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
+        }
+
+        /* Focus styles for better accessibility */
+        button:focus-visible,
+        input:focus-visible,
+        a:focus-visible {
+            outline: 3px solid var(--accent-primary) !important;
+            outline-offset: 2px;
+        }
+
         .btn-primary {
-            background: #667eea;
-            color: white;
+            background: var(--accent-primary);
+            color: var(--slate-100);
         }
 
         .btn-primary:hover {
-            background: #5a67d8;
-            transform: translateY(-1px);
+            background: var(--accent-secondary);
+            box-shadow: var(--shadow-md);
         }
 
+
         .btn-secondary {
-            background: #718096;
-            color: white;
+            background: var(--slate-600);
+            color: var(--slate-100);
         }
 
         .btn-secondary:hover {
-            background: #4a5568;
-            transform: translateY(-1px);
+            background: var(--slate-700);
+            box-shadow: var(--shadow-md);
         }
 
+
         .btn-success {
-            background: #48bb78;
-            color: white;
+            background: var(--accent-success);
+            color: var(--slate-100);
         }
 
         .btn-success:hover {
-            background: #38a169;
-            transform: translateY(-1px);
+            background: var(--accent-success);
+            box-shadow: var(--shadow-md);
         }
+
 
         .content-section {
             padding: 30px;
+            background: var(--gradient-card);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--slate-700);
         }
 
         .stats-bar {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
             align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f7fafc;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--slate-800);
             border-radius: 12px;
+            border: 1px solid var(--slate-700);
         }
 
         .stat-item {
@@ -135,15 +413,15 @@
         }
 
         .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #667eea;
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+            margin-bottom: 2px;
         }
 
         .stat-label {
-            color: #718096;
+            color: var(--slate-400);
             font-size: 0.9rem;
-            margin-top: 5px;
         }
 
         .feedback-list {
@@ -153,108 +431,197 @@
         }
 
         .feedback-card {
-            border: 1px solid #e2e8f0;
+            border: 1px solid rgba(59, 130, 246, 0.15);
             border-radius: 12px;
-            overflow: hidden;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
             transition: all 0.3s ease;
-            background: white;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .feedback-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                    var(--accent-primary) 0%,
+                    var(--accent-secondary) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .feedback-card:hover::before {
+            transform: scaleX(1);
         }
 
         .feedback-card:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         .feedback-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-800) 100%);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.15);
             cursor: pointer;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.3s ease;
+            position: relative;
+            gap: 1rem;
         }
 
         .feedback-header:hover {
-            background: #edf2f7;
+            background: linear-gradient(135deg, var(--slate-600) 0%, var(--slate-700) 100%);
+            transform: translateY(-1px);
         }
 
         .user-info {
             flex: 1;
+            min-width: 0;
+            /* Enables text truncation */
         }
 
         .user-name {
-            font-size: 1.1rem;
             font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 5px;
+            color: var(--slate-100);
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-name::after {
+            content: "•";
+            color: var(--slate-500);
+            font-weight: normal;
         }
 
         .user-email {
-            color: #718096;
-            font-size: 0.9rem;
+            color: var(--slate-400);
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .message-title {
             font-weight: 500;
-            color: #4a5568;
-            margin: 10px 0 5px 0;
+            color: var(--slate-300);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .feedback-date {
+            color: var(--slate-500);
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         .feedback-meta {
             display: flex;
             align-items: center;
-            gap: 15px;
-        }
-
-        .feedback-date {
-            color: #718096;
-            font-size: 0.9rem;
+            gap: 0.75rem;
+            flex-shrink: 0;
         }
 
         .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
         }
 
         .status-replied {
-            background: #c6f6d5;
-            color: #22543d;
+            background: linear-gradient(135deg, var(--accent-success) 0%, #059669 100%);
+            color: var(--slate-100);
         }
 
         .status-pending {
-            background: #fed7d7;
-            color: #742a2a;
+            background: linear-gradient(135deg, var(--accent-warning) 0%, #d97706 100%);
+            color: var(--slate-100);
         }
 
         .expand-icon {
-            width: 20px;
-            height: 20px;
-            color: #718096;
-            transition: transform 0.3s ease;
+            color: var(--slate-400);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.75rem;
         }
 
         .feedback-card.expanded .expand-icon {
             transform: rotate(180deg);
+            color: var(--accent-primary);
+        }
+
+        .feedback-details {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-800) 100%);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            position: relative;
+            z-index: 3;
+        }
+
+        .message-content {
+            background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-800) 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-primary);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .existing-reply {
+            background: var(--slate-700);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-success);
+            margin-bottom: 20px;
+        }
+
+        .reply-section {
+            background: var(--slate-800);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--slate-600);
         }
 
         .feedback-details {
             display: none;
-            padding: 0 20px 20px 20px;
+            padding: 0.75rem;
+            background: var(--slate-800);
         }
 
         .feedback-card.expanded .feedback-details {
             display: block;
-            animation: slideDown 0.3s ease;
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-8px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -262,26 +629,40 @@
         }
 
         .message-content {
-            background: #f7fafc;
-            padding: 15px;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 0.875rem;
             border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #667eea;
+            margin-bottom: 0.875rem;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .message-content strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--slate-300);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .existing-reply {
-            background: #e6fffa;
-            padding: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.875rem;
             border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid #48bb78;
+            margin: 0.75rem 0;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         .reply-section {
             margin-top: 20px;
             padding: 20px;
-            background: #f8fafc;
+            background: var(--slate-800);
             border-radius: 8px;
+            border: 1px solid var(--slate-600);
         }
 
         .form-group {
@@ -292,34 +673,141 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #4a5568;
+            color: var(--slate-300);
         }
 
         .form-input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--slate-600);
             border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s ease;
+            background: var(--slate-800);
+            color: var(--slate-100);
+            transition: var(--transition-fast);
         }
 
         .form-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .form-textarea {
             min-height: 100px;
             resize: vertical;
+            border: 2px solid var(--slate-600);
+            background: var(--slate-800);
+            color: var(--slate-100);
+            transition: var(--transition-fast);
         }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+
 
         .action-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 0.5rem;
+            margin-top: 1rem;
             flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            border: 1px solid transparent;
+        }
+
+        .btn-success {
+            background: var(--accent-success);
+            color: var(--slate-100);
+        }
+
+        .btn-success:hover {
+            background: #0d9668;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-danger {
+            background: var(--accent-error);
+            color: var(--slate-100);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--slate-300);
+            border: 1px solid var(--slate-600);
+        }
+
+        .btn-secondary:hover {
+            background: var(--slate-700);
+            color: var(--slate-100);
+            border-color: var(--slate-500);
+        }
+
+        .btn-success {
+            background: var(--accent-success);
+            color: var(--slate-100);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .btn-success:hover {
+            background: var(--accent-success);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-danger {
+            background: var(--accent-error);
+            color: var(--slate-100);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .btn-danger:hover {
+            background: var(--accent-error);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--slate-800);
+            color: var(--slate-300);
+            border: 2px solid var(--slate-600);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .btn-secondary:hover {
+            background: var(--slate-700);
+            color: var(--slate-100);
+            border-color: var(--slate-500);
+            box-shadow: var(--shadow-md);
         }
 
         .alert {
@@ -330,33 +818,35 @@
         }
 
         .alert-success {
-            background: #c6f6d5;
-            border-color: #9ae6b4;
-            color: #22543d;
+            background: var(--accent-success);
+            color: var(--slate-100);
+            border: 1px solid var(--accent-success);
         }
 
         .alert-error {
-            background: #fed7d7;
-            border-color: #feb2b2;
-            color: #742a2a;
+            background: var(--accent-error);
+            color: var(--slate-100);
+            border: 1px solid var(--accent-error);
         }
 
+
+
         .alert-warning {
-            background: #fefcbf;
-            border-color: #f6e05e;
-            color: #744210;
+            background: var(--accent-warning);
+            border-color: var(--accent-warning);
+            color: var(--slate-100);
         }
 
         .alert-info {
-            background: #bee3f8;
-            border-color: #90cdf4;
-            color: #2c5282;
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--slate-100);
         }
 
         .no-feedback {
             text-align: center;
             padding: 60px 20px;
-            color: #718096;
+            color: var(--slate-400);
         }
 
         .no-feedback svg {
@@ -369,16 +859,32 @@
         .loading {
             text-align: center;
             padding: 40px;
-            color: #718096;
+            color: var(--slate-400);
         }
 
         @media (max-width: 768px) {
             body {
                 padding: 10px;
             }
+            
+            .header-title-main {
+                font-size: 1.1rem;
+            }
+            
+            .header-title-sub {
+                font-size: 0.7rem;
+            }
+
+            .admin-nav-links {
+                display: none;
+            }
+
+            .admin-mobile-menu-toggle {
+                display: flex;
+            }
 
             .header h1 {
-                font-size: 2rem;
+                font-size: 1.75rem;
             }
 
             .search-container {
@@ -391,60 +897,225 @@
             }
 
             .stats-bar {
-                flex-direction: column;
-                gap: 20px;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .stat-number {
+                font-size: 1.4rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .feedback-card {
+                border-radius: 14px;
             }
 
             .feedback-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 6px;
+                padding: 0.9rem 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
             }
 
             .feedback-meta {
-                align-self: flex-end;
+                align-self: stretch;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                gap: 8px;
             }
 
             .action-buttons {
                 justify-content: flex-start;
             }
+
+            .status-badge {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.68rem;
+            }
+
+            .expand-icon {
+                font-size: 0.50rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-nav-container {
+                padding: 0.75rem 1rem;
+                height: 60px;
+            }
+
+            .admin-mobile-nav {
+                top: 60px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .search-container {
+                padding: 15px;
+            }
+
+            .search-input {
+                font-size: 0.9rem;
+            }
+
+            .stats-bar {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .feedback-card {
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+
+            .feedback-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+                padding: 0.75rem 0.875rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .status-badge {
+                padding: 0.28rem 0.5rem;
+                font-size: 0.66rem;
+            }
+
+            .expand-icon {
+                font-size: 0.30rem;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <form id="form1" runat="server">
         <div class="container">
+            <!-- Modern Admin Navigation -->
+            <nav class="admin-nav">
+                <div class="admin-nav-container">
+                    <a class="header-title" href='<%= ResolveUrl("~/Pages/Admin/Dashboard/AdminInfo.aspx") %>'>
+                        <span class="header-title-main">Admin Dashboard</span>
+                        <span class="header-title-sub">Md. Shifat Hasan</span>
+                    </a>
+
+                    <div class="admin-nav-links">
+                        <a href="~/Pages/Home.aspx" runat="server" class="admin-nav-link">
+                            <span>🏠</span>
+                            <span class="admin-link-text">Home</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                        <a href="~/Pages/Admin/Dashboard/AdminInfo.aspx" runat="server" class="admin-nav-link">
+                            <span>👤</span>
+                            <span class="admin-link-text">Admin Info</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                        <a href="~/Pages/Admin/Dashboard/ShowcaseList.aspx" runat="server" class="admin-nav-link">
+                            <span>📁</span>
+                            <span class="admin-link-text">Showcase List</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                        <a href="~/Pages/Admin/Dashboard/UserFeedbacks.aspx" runat="server"
+                            class="admin-nav-link active">
+                            <span>💬</span>
+                            <span class="admin-link-text">User Feedbacks</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                    </div>
+
+                    <button class="admin-mobile-menu-toggle" onclick="toggleAdminMobileMenu(event)">
+                        <div class="admin-hamburger-line"></div>
+                        <div class="admin-hamburger-line"></div>
+                        <div class="admin-hamburger-line"></div>
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation -->
+                <div class="admin-mobile-nav" id="adminMobileNav">
+                    <a href="~/Pages/Home.aspx" runat="server" class="admin-mobile-link">
+                        <span>🏠</span> Home
+                    </a>
+                    <a href="~/Pages/Admin/Dashboard/AdminInfo.aspx" runat="server" class="admin-mobile-link">
+                        <span>👤</span> Admin Info
+                    </a>
+                    <a href="~/Pages/Admin/Dashboard/ShowcaseList.aspx" runat="server" class="admin-mobile-link">
+                        <span>📁</span> Showcase List
+                    </a>
+                    <a href="~/Pages/Admin/Dashboard/UserFeedbacks.aspx" runat="server"
+                        class="admin-mobile-link active">
+                        <span>💬</span> User Feedbacks
+                    </a>
+                </div>
+            </nav>
+
             <div class="header">
                 <h1>User Feedback Management</h1>
                 <p>Manage and respond to user feedback efficiently</p>
             </div>
 
             <asp:Panel ID="MessagePanel" runat="server" Visible="false">
-                <div id="alertDiv" runat="server" class="alert" style="margin: 20px 30px 0 30px; border-radius: 8px;">
+                <div id="alertDiv" runat="server" class="alert"
+                    style="margin: 20px 30px 0 30px; border-radius: 8px;">
                     <asp:Label ID="MessageLabel" runat="server"></asp:Label>
                 </div>
             </asp:Panel>
 
             <div class="search-section">
                 <div class="search-container">
-                    <asp:TextBox ID="txtSearch" runat="server" CssClass="search-input" placeholder="Search by name, email, or message title..."></asp:TextBox>
-                    <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-primary" OnClick="btnSearch_Click"/>
-                    <asp:Button ID="btnShowAll" runat="server" Text="Show All" CssClass="btn btn-secondary" OnClick="btnShowAll_Click"/>
+                    <asp:TextBox ID="txtSearch" runat="server" CssClass="search-input"
+                        placeholder="Search by name, email, or message title..."></asp:TextBox>
+                    <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-primary"
+                        OnClick="btnSearch_Click" />
+                    <asp:Button ID="btnShowAll" runat="server" Text="Show All" CssClass="btn btn-secondary"
+                        OnClick="btnShowAll_Click" />
                 </div>
             </div>
 
             <div class="content-section">
                 <div class="stats-bar">
                     <div class="stat-item">
-                        <div class="stat-number"><asp:Label ID="lblTotalFeedback" runat="server" Text="0"></asp:Label></div>
+                        <div class="stat-number">
+                            <asp:Label ID="lblTotalFeedback" runat="server" Text="0"></asp:Label>
+                        </div>
                         <div class="stat-label">Total Feedback</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number"><asp:Label ID="lblPendingReplies" runat="server" Text="0"></asp:Label></div>
+                        <div class="stat-number">
+                            <asp:Label ID="lblPendingReplies" runat="server" Text="0"></asp:Label>
+                        </div>
                         <div class="stat-label">Pending Replies</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number"><asp:Label ID="lblRepliedFeedback" runat="server" Text="0"></asp:Label></div>
+                        <div class="stat-number">
+                            <asp:Label ID="lblRepliedFeedback" runat="server" Text="0"></asp:Label>
+                        </div>
                         <div class="stat-label">Replied</div>
                     </div>
                 </div>
@@ -455,62 +1126,83 @@
                             <div class="feedback-card" data-id="<%# Eval("id") %>">
                                 <div class="feedback-header" onclick="toggleFeedback(this)">
                                     <div class="user-info">
-                                        <div class="user-name"><%# Eval("user_name") %></div>
-                                        <div class="user-email"><%# Eval("user_email") %></div>
-                                        <div class="message-title"><%# Eval("user_message_title") %></div>
+                                        <div class="user-name">
+                                            <%# Eval("user_name") %>
+                                        </div>
+                                        <div class="user-email">
+                                            <%# Eval("user_email") %>
+                                        </div>
+                                        <div class="message-title">
+                                            <%# Eval("user_message_title") %>
+                                        </div>
                                     </div>
                                     <div class="feedback-meta">
-                                        <div class="feedback-date"><%# Eval("datetime_user_feedback", "{0:MMM dd, yyyy HH:mm}") %></div>
-                                        <div class="status-badge <%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString()) ? "status-replied" : "status-pending" %>">
-                                            <%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString()) ? "Replied" : "Pending" %>
+                                        <div class="feedback-date">
+                                            <%# Eval("datetime_user_feedback", "{0:MMM dd, yyyy HH:mm}") %>
                                         </div>
-                                        <svg class="expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        <div class="status-badge <%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString()) ? "status-replied" : "status-pending" %>">
+                                            <%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString())
+                                                    ? "Replied" : "Pending" %>
+                                        </div>
+                                        <svg class="expand-icon" fill="none" stroke="currentColor"
+                                             viewBox="0 0 24 24" width="24" height="24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M19 9l-7 7-7-7"></path>
                                         </svg>
                                     </div>
                                 </div>
 
                                 <div class="feedback-details">
                                     <div class="message-content">
-                                        <strong>User Message:</strong><br/>
+                                        <strong>User Message:</strong><br />
                                         <%# Eval("user_message_body") %>
                                     </div>
 
-                                    <%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString()) ?
-                                            "<div class='existing-reply'><strong>Your Reply:</strong><br/>" +
-                                            Eval("admin_message_body") +
-                                            "<br/><small style='color: #718096;'>Replied on: " + Eval("datetime_admin_reply", "{0:MMM dd, yyyy HH:mm}") + "</small></div>" :
-                                            "" %>
-
-                                    <div class="reply-section">
-                                        <h4 style="margin-bottom: 20px; color: #4a5568;">
-                                            <%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString()) ? "Update Reply" : "Send Reply" %>
-                                        </h4>
-                                        
-                                        <div class="form-group">
-                                            <label class="form-label">Subject</label>
-                                            <asp:TextBox ID="txtReplySubject" runat="server" CssClass="form-input" 
-                                                        Text='<%# "Re: " + Eval("user_message_title") %>'></asp:TextBox>
+                                    <asp:Panel ID="pnlExistingReply" runat="server" Visible='<%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString()) %>'>
+                                        <div class="existing-reply">
+                                            <strong>Your Reply:</strong><br/>
+                                            <%# Eval("admin_message_body") %>
+                                            <br/>
+                                            <small style='color: var(--slate-400);'>Replied on: <%# Eval("datetime_admin_reply", "{0:MMM dd, yyyy HH:mm}") %></small>
                                         </div>
+                                    </asp:Panel>
 
-                                        <div class="form-group">
-                                            <label class="form-label">Reply Message</label>
-                                            <asp:TextBox ID="txtReplyMessage" runat="server" CssClass="form-input form-textarea" 
-                                                        TextMode="MultiLine" Rows="6"
-                                                        Text='<%# !string.IsNullOrEmpty(Eval("admin_message_body")?.ToString()) ? Eval("admin_message_body") : "Dear " + Eval("user_name") + ",\n\nThank you for contacting us. We have received your message and appreciate your feedback.\n\n[Your response here]\n\nBest regards,\nAdmin Team" %>'></asp:TextBox>
-                                        </div>
+                                        <div class="reply-section">
+                                            <h4 style="margin-bottom: 20px; color: var(--slate-300);">
+                                                <asp:Label ID="lblReplyHeader" runat="server" 
+                                                           Text='<%# !string.IsNullOrEmpty(Eval("admin_message_title")?.ToString()) ? "Update Reply" : "Send Reply" %>'></asp:Label>
+                                            </h4>
 
-                                        <div class="action-buttons">
-                                            <asp:Button ID="btnSendReply" runat="server" Text="Send Reply" CssClass="btn btn-success" 
-                                                       CommandName="SendReply" CommandArgument='<%# Eval("id") %>' 
-                                                       OnClientClick="return confirm('Are you sure you want to send this reply?');" />
-                                            <asp:Button ID="btnSaveReply" runat="server" Text="Save Draft" CssClass="btn btn-primary" 
-                                                       CommandName="SaveReply" CommandArgument='<%# Eval("id") %>' />
-                                            <asp:Button ID="btnDelete" runat="server" Text="Delete Feedback" CssClass="btn btn-secondary" 
-                                                       CommandName="Delete" CommandArgument='<%# Eval("id") %>' 
-                                                       OnClientClick="return confirm('Are you sure you want to delete this feedback? This action cannot be undone.');" />
+                                            <div class="form-group">
+                                                <label class="form-label">Subject</label>
+                                                <asp:TextBox ID="txtReplySubject" runat="server"
+                                                    CssClass="form-input"
+                                                    Text='<%# "Re: " + Eval("user_message_title") %>'></asp:TextBox>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Reply Message</label>
+                                                <asp:TextBox ID="txtReplyMessage" runat="server"
+                                                    CssClass="form-input form-textarea" TextMode="MultiLine"
+                                                    Rows="6"
+                                                             Text='<%# GetReplyText(Eval("admin_message_body"), Eval("user_name")) %>'>
+                                                </asp:TextBox>
+                                            </div>
+
+                                            <div class="action-buttons">
+                                                <asp:Button ID="btnSendReply" runat="server" Text="Send Reply"
+                                                    CssClass="btn btn-success" CommandName="SendReply"
+                                                    CommandArgument='<%# Eval("id") %>'
+                                                    OnClientClick="return confirm('Are you sure you want to send this reply?');" />
+                                                <asp:Button ID="btnSaveReply" runat="server" Text="Save Draft"
+                                                    CssClass="btn btn-primary" CommandName="SaveReply"
+                                                    CommandArgument='<%# Eval("id") %>' />
+                                                <asp:Button ID="btnDelete" runat="server" Text="Delete Feedback"
+                                                    CssClass="btn btn-secondary" CommandName="Delete"
+                                                    CommandArgument='<%# Eval("id") %>'
+                                                    OnClientClick="return confirm('Are you sure you want to delete this feedback? This action cannot be undone.');" />
+                                            </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </ItemTemplate>
@@ -519,7 +1211,9 @@
                     <asp:Panel ID="pnlNoFeedback" runat="server" Visible="false">
                         <div class="no-feedback">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                                </path>
                             </svg>
                             <h3>No feedback found</h3>
                             <p>No feedback records match your current search criteria.</p>
@@ -531,17 +1225,64 @@
     </form>
 
     <script type="text/javascript">
+        function toggleAdminMobileMenu(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const mobileNav = document.getElementById('adminMobileNav');
+            const toggle = document.querySelector('.admin-mobile-menu-toggle');
+
+            if (!mobileNav || !toggle) {
+                console.error('Mobile navigation elements not found');
+                return;
+            }
+
+            if (mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
+                toggle.classList.remove('active');
+            } else {
+                mobileNav.classList.add('active');
+                toggle.classList.add('active');
+            }
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function (event) {
+            const mobileNav = document.getElementById('adminMobileNav');
+            const toggle = document.querySelector('.admin-mobile-menu-toggle');
+
+            if (mobileNav && mobileNav.classList.contains('active') &&
+                !mobileNav.contains(event.target) &&
+                !toggle.contains(event.target)) {
+                mobileNav.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                const mobileNav = document.getElementById('adminMobileNav');
+                const toggle = document.querySelector('.admin-mobile-menu-toggle');
+
+                if (mobileNav && toggle) {
+                    mobileNav.classList.remove('active');
+                    toggle.classList.remove('active');
+                }
+            }
+        });
+
         function toggleFeedback(headerElement) {
             const card = headerElement.closest('.feedback-card');
             const isExpanded = card.classList.contains('expanded');
-            
+
             // Close all other expanded cards
-            document.querySelectorAll('.feedback-card.expanded').forEach(function(expandedCard) {
+            document.querySelectorAll('.feedback-card.expanded').forEach(function (expandedCard) {
                 if (expandedCard !== card) {
                     expandedCard.classList.remove('expanded');
                 }
             });
-            
+
             // Toggle current card
             if (isExpanded) {
                 card.classList.remove('expanded');
@@ -551,13 +1292,13 @@
         }
 
         // Auto-hide alert messages after 5 seconds
-        window.onload = function() {
+        window.onload = function () {
             var alertDiv = document.getElementById('<%= MessagePanel.ClientID %>');
             if (alertDiv && alertDiv.style.display !== 'none') {
-                setTimeout(function() {
+                setTimeout(function () {
                     alertDiv.style.fadeOut = 'opacity 0.5s';
                     alertDiv.style.opacity = '0';
-                    setTimeout(function() {
+                    setTimeout(function () {
                         alertDiv.style.display = 'none';
                     }, 500);
                 }, 5000);
@@ -565,16 +1306,16 @@
         };
 
         // Add loading state for buttons
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
-                button.addEventListener('click', function(e) {
+                button.addEventListener('click', function (e) {
                     if (this.type === 'submit') {
                         this.style.opacity = '0.7';
                         this.style.pointerEvents = 'none';
                         const originalText = this.textContent;
                         this.textContent = 'Processing...';
-                        
+
                         setTimeout(() => {
                             this.textContent = originalText;
                             this.style.opacity = '1';

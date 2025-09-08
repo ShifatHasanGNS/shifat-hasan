@@ -14,70 +14,263 @@
             box-sizing: border-box;
         }
 
+        :root {
+            /* Dark Theme Slate Color Palette */
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+            
+            /* Accent Colors */
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-error: #ef4444;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            --gradient-dark: linear-gradient(135deg, var(--slate-800), var(--slate-900));
+            --gradient-card: linear-gradient(135deg, var(--slate-800), var(--slate-700));
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+            --transition-slow: 0.5s ease-in-out;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-dark);
             min-height: 100vh;
-            color: #1e293b;
+            color: var(--slate-100);
             line-height: 1.6;
+        }
+        
+        .header-title {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        
+        .header-title-main {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: var(--gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header-title-sub {
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            font-weight: 400;
+            margin-top: -2px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            padding-top: 6rem; /* Account for fixed navigation */
         }
 
-        /* Navigation */
+        /* Modern Admin Navigation - Matching Home Page Style */
         .admin-nav {
-            background: rgba(255, 255, 255, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 1.5rem 2rem;
-            margin-bottom: 2rem;
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+            padding: 0;
+        }
+
+        .admin-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            height: 70px;
+            width: 100%;
         }
 
-        .admin-nav h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #1e293b;
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
+        .admin-nav-links {
             display: flex;
-            gap: 1rem;
+            gap: 2rem;
+            align-items: center;
+            flex-shrink: 0;
         }
 
-        .nav-links a {
+        .admin-nav-link {
+            text-decoration: none;
+            color: var(--slate-300);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: var(--transition-normal);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            color: #1e293b;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         }
 
-        .nav-links a:hover {
-            background: #6366f1;
-            color: white;
-            border-color: #6366f1;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        .admin-link-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-link-underline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition-normal);
+        }
+
+        .admin-nav-link:hover {
+            color: var(--accent-primary);
+        }
+
+        .admin-nav-link:hover .admin-link-underline {
+            transform: scaleX(1);
+        }
+
+        .admin-nav-link.active {
+            color: var(--accent-primary);
+        }
+
+        .admin-nav-link.active .admin-link-underline {
+            transform: scaleX(1);
+        }
+
+        .admin-nav-link span {
+            font-size: 1rem;
+            filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.3));
+        }
+
+        /* Mobile Menu Toggle */
+        .admin-mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease-in-out;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .admin-hamburger-line {
+            width: 24px;
+            height: 2px;
+            background: var(--slate-300);
+            transition: var(--transition-normal);
+            transform-origin: center;
+        }
+
+        .admin-mobile-menu-toggle:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .admin-mobile-menu-toggle.active .admin-hamburger-line:first-child {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .admin-mobile-menu-toggle.active .admin-hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .admin-mobile-menu-toggle.active .admin-hamburger-line:last-child {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Navigation */
+        .admin-mobile-nav {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            z-index: 1001;
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .admin-mobile-nav.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .admin-mobile-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            color: var(--slate-300);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            transition: var(--transition-normal);
+        }
+
+        .admin-mobile-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .admin-mobile-link.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+        }
+
+        .admin-mobile-link span {
+            font-size: 1.1rem;
         }
 
         /* Stats Section */
@@ -92,34 +285,34 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--gradient-card);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--slate-700);
             border-radius: 16px;
             padding: 2rem;
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-fast);
         }
 
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-xl);
         }
 
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--slate-100);
             line-height: 1;
         }
 
         .stat-label {
             font-size: 0.875rem;
             font-weight: 500;
-            color: #64748b;
+            color: var(--slate-400);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
@@ -135,15 +328,15 @@
         }
 
         .message-container.success {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: #10b981;
-            color: #065f46;
+            background: var(--accent-success);
+            border-color: var(--accent-success);
+            color: var(--slate-100);
         }
 
         .message-container.error {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: #ef4444;
-            color: #991b1b;
+            background: var(--accent-error);
+            border-color: var(--accent-error);
+            color: var(--slate-100);
         }
 
         @keyframes slideIn {
@@ -159,15 +352,15 @@
 
         /* Tabs */
         .tabs-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--gradient-card);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--slate-700);
             border-radius: 16px;
             padding: 0.5rem;
             margin-bottom: 2rem;
             display: flex;
             gap: 0.25rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-lg);
         }
 
         .tab-btn {
@@ -175,11 +368,11 @@
             padding: 1rem 1.5rem;
             border: none;
             background: transparent;
-            color: #64748b;
+            color: var(--slate-400);
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition-fast);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -187,25 +380,25 @@
         }
 
         .tab-btn:hover {
-            background: #f1f5f9;
-            color: #1e293b;
+            background: var(--slate-700);
+            color: var(--slate-100);
         }
 
         .tab-btn.active {
-            background: #6366f1;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            background: var(--accent-primary);
+            color: var(--slate-100);
+            box-shadow: var(--shadow-md);
         }
 
         /* Tab Content */
         .tab-content {
             display: none;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--gradient-card);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--slate-700);
             border-radius: 16px;
             padding: 2rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-lg);
         }
 
         .tab-content.active {
@@ -234,17 +427,18 @@
             flex: 1;
             min-width: 200px;
             padding: 0.875rem 1.25rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--slate-600);
             border-radius: 12px;
             font-size: 0.95rem;
-            transition: all 0.2s ease;
-            background: white;
+            transition: var(--transition-fast);
+            background: var(--slate-800);
+            color: var(--slate-100);
         }
 
         .search-input:focus, .filter-select:focus {
             outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .search-btn, .clear-btn {
@@ -253,131 +447,202 @@
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition-fast);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .search-btn {
-            background: #6366f1;
-            color: white;
+            background: var(--accent-primary);
+            color: var(--slate-100);
         }
 
         .search-btn:hover {
-            background: #4f46e5;
+            background: var(--accent-secondary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-md);
         }
 
         .clear-btn {
-            background: #f8fafc;
-            color: #64748b;
-            border: 2px solid #e2e8f0;
+            background: var(--slate-800);
+            color: var(--slate-300);
+            border: 2px solid var(--slate-600);
         }
 
         .clear-btn:hover {
-            background: #f1f5f9;
-            color: #1e293b;
-            border-color: #94a3b8;
+            background: var(--slate-700);
+            color: var(--slate-100);
+            border-color: var(--slate-500);
         }
 
         /* Projects Grid */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr)); /* two per row on non-mobile */
             gap: 1.5rem;
         }
 
         .project-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
             overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(59, 130, 246, 0.1) 0%, 
+                rgba(139, 92, 246, 0.1) 50%, 
+                rgba(236, 72, 153, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--accent-primary) 0%, 
+                var(--accent-secondary) 50%, 
+                #ec4899 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover::after {
+            transform: scaleX(1);
         }
 
         .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            border-color: #6366f1;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 8px 24px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(59, 130, 246, 0.4);
         }
 
         .project-header {
-            padding: 1.25rem 1.5rem 0;
+            padding: 1.5rem 1.5rem 0;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            position: relative;
+            z-index: 3;
         }
-
+        
         .project-type {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 12px;
+            color: var(--slate-500);
+            padding: 0.625rem 1.25rem;
+            border-radius: 16px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
         }
 
         .project-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
         .action-btn {
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 2.75rem;
+            height: 2.75rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
         }
 
         .edit-btn {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            background: linear-gradient(135deg, var(--accent-success) 0%, #059669 100%);
+            color: var(--slate-100);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
         .edit-btn:hover {
-            background: #10b981;
-            color: white;
-            transform: scale(1.1);
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
         }
 
         .delete-btn {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            background: linear-gradient(135deg, var(--accent-error) 0%, #dc2626 100%);
+            color: var(--slate-100);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
         }
 
         .delete-btn:hover {
-            background: #ef4444;
-            color: white;
-            transform: scale(1.1);
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
         }
 
         .project-image {
-            margin: 1rem 1.5rem;
-            height: 200px;
-            border-radius: 12px;
+            margin: 1.5rem 1.5rem 1rem;
+            height: auto;
+            aspect-ratio: 1.618 / 1; /* Golden ratio width:height */
+            border-radius: 16px;
             overflow: hidden;
-            background: #f8fafc;
+            background: linear-gradient(135deg, var(--slate-700) 0%, var(--slate-800) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .project-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
 
         .project-card:hover .project-image img {
@@ -385,64 +650,75 @@
         }
 
         .no-image {
-            color: #94a3b8;
-            font-size: 3rem;
+            color: var(--slate-400);
+            font-size: 2.5rem;
+            font-weight: 500;
         }
 
         .project-content {
-            padding: 0 1.5rem 1.5rem;
+            padding: 0 1.5rem 2rem;
+            position: relative;
+            z-index: 3;
         }
 
         .project-title {
-            font-size: 1.25rem;
+            font-size: 1.375rem;
             font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.75rem;
+            color: var(--slate-100);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--slate-100) 0%, var(--slate-300) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.3;
         }
 
         .project-description {
-            color: #64748b;
-            line-height: 1.6;
-            margin-bottom: 1rem;
+            color: var(--slate-400);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
         }
 
         .project-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
         .project-links a {
-            padding: 0.5rem 1rem;
-            background: #f8fafc;
-            color: #1e293b;
+            padding: 0.625rem 1.25rem;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            color: var(--slate-100);
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.875rem;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
-            transition: all 0.2s ease;
-            border: 1px solid #e2e8f0;
+            font-size: 0.875rem;
         }
 
         .project-links a:hover {
-            background: #6366f1;
-            color: white;
-            border-color: #6366f1;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: var(--slate-100);
+            border-color: var(--accent-primary);
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
-            color: #64748b;
+            color: var(--slate-400);
         }
 
         .empty-state h3 {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: #1e293b;
+            color: var(--slate-100);
         }
 
         /* Form Styles */
@@ -450,18 +726,18 @@
             text-align: center;
             margin-bottom: 2rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--slate-700);
         }
 
         .manage-header h2, .add-header h2 {
             font-size: 2rem;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--slate-100);
             margin-bottom: 0.5rem;
         }
 
         .manage-header p, .add-header p {
-            color: #64748b;
+            color: var(--slate-400);
             font-size: 1.1rem;
         }
 
@@ -478,42 +754,44 @@
 
         .load-input {
             padding: 1rem 1.25rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--slate-600);
             border-radius: 12px;
             font-size: 1rem;
             min-width: 200px;
+            background: var(--slate-800);
+            color: var(--slate-100);
             transition: all 0.2s ease;
         }
 
         .load-input:focus {
             outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .load-btn {
             padding: 1rem 2rem;
-            background: #6366f1;
-            color: white;
+            background: var(--accent-primary);
+            color: var(--slate-100);
             border: none;
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition-fast);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .load-btn:hover {
-            background: #4f46e5;
+            background: var(--accent-secondary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-md);
         }
 
         .form-container {
-            background: rgba(248, 250, 252, 0.5);
-            border: 1px solid #e2e8f0;
+            background: var(--slate-800);
+            border: 1px solid var(--slate-700);
             border-radius: 16px;
             padding: 2rem;
         }
@@ -532,7 +810,7 @@
         .form-label {
             display: block;
             font-weight: 600;
-            color: #1e293b;
+            color: var(--slate-100);
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
         }
@@ -540,18 +818,19 @@
         .form-input, .form-select, .form-textarea {
             width: 100%;
             padding: 1rem 1.25rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--slate-600);
             border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.2s ease;
-            background: white;
+            transition: var(--transition-fast);
+            background: var(--slate-800);
+            color: var(--slate-100);
             font-family: inherit;
         }
 
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .form-textarea {
@@ -573,7 +852,7 @@
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition-fast);
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -581,58 +860,59 @@
         }
 
         .btn-success {
-            background: #10b981;
-            color: white;
+            background: var(--accent-success);
+            color: var(--slate-100);
         }
 
         .btn-success:hover {
-            background: #059669;
+            background: var(--accent-success);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-danger {
-            background: #ef4444;
-            color: white;
+            background: var(--accent-error);
+            color: var(--slate-100);
         }
 
         .btn-danger:hover {
-            background: #dc2626;
+            background: var(--accent-error);
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-secondary {
-            background: white;
-            color: #64748b;
-            border: 2px solid #e2e8f0;
+            background: var(--slate-800);
+            color: var(--slate-300);
+            border: 2px solid var(--slate-600);
         }
 
         .btn-secondary:hover {
-            background: #f1f5f9;
-            color: #1e293b;
-            border-color: #94a3b8;
+            background: var(--slate-700);
+            color: var(--slate-100);
+            border-color: var(--slate-500);
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .header-title-main {
+                font-size: 1.1rem;
+            }
+            
+            .header-title-sub {
+                font-size: 0.7rem;
+            }
+            
             .container {
-                padding: 1rem;
+                padding: 5rem 1rem 1rem;
             }
 
-            .admin-nav {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+            .admin-nav-links {
+                display: none;
             }
 
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .admin-mobile-menu-toggle {
+                display: flex;
             }
 
             .search-group {
@@ -661,7 +941,49 @@
             }
 
             .tabs-container {
-                flex-direction: column;
+                flex-direction: row;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 5rem 0.75rem 0.75rem;
+            }
+
+            .admin-nav-container {
+                padding: 0.75rem 1rem;
+                height: 60px;
+            }
+
+            .admin-mobile-nav {
+                top: 60px;
+            }
+
+            .search-group {
+                gap: 0.75rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .project-card {
+                margin-bottom: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-actions {
+                gap: 0.75rem;
+            }
+
+            .btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -708,41 +1030,86 @@
         .btn-success:focus-visible,
         .btn-danger:focus-visible,
         .btn-secondary:focus-visible {
-            outline: 3px solid #6366f1;
+            outline: 3px solid var(--accent-primary);
             outline-offset: 2px;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            color: var(--slate-100);
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
     <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <asp:HiddenField ID="hfEditProjectId" runat="server" />
+        <asp:Button ID="btnLoadProjectForEdit" runat="server" style="display:none;" OnClick="btnLoadProjectForEdit_Click" />
         <div class="container">
-            <!-- Navigation -->
+            <!-- Modern Admin Navigation -->
             <nav class="admin-nav">
-                <h1>Showcase Management</h1>
-                <div class="nav-links">
-                    <a href="~/Pages/Home.aspx" runat="server">Home</a>
-                    <a href="~/Pages/Admin/Dashboard/AdminInfo.aspx" runat="server">Admin Info</a>
-                    <a href="~/Pages/Admin/Dashboard/UserFeedbacks.aspx" runat="server">User Feedbacks</a>
+                <div class="admin-nav-container">
+                    <a class="header-title" href='<%= ResolveUrl("~/Pages/Admin/Dashboard/AdminInfo.aspx") %>'>
+                        <span class="header-title-main">Admin Dashboard</span>
+                        <span class="header-title-sub">Md. Shifat Hasan</span>
+                    </a>
+                    
+                    <div class="admin-nav-links">
+                        <a href="~/Pages/Home.aspx" runat="server" class="admin-nav-link">
+                            <span>🏠</span>
+                            <span class="admin-link-text">Home</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                        <a href="~/Pages/Admin/Dashboard/AdminInfo.aspx" runat="server" class="admin-nav-link">
+                            <span>👤</span>
+                            <span class="admin-link-text">Admin Info</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                        <a href="~/Pages/Admin/Dashboard/ShowcaseList.aspx" runat="server" class="admin-nav-link active">
+                            <span>📁</span>
+                            <span class="admin-link-text">Showcase List</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                        <a href="~/Pages/Admin/Dashboard/UserFeedbacks.aspx" runat="server" class="admin-nav-link">
+                            <span>💬</span>
+                            <span class="admin-link-text">User Feedbacks</span>
+                            <span class="admin-link-underline"></span>
+                        </a>
+                    </div>
+                    
+                    <button class="admin-mobile-menu-toggle" onclick="toggleAdminMobileMenu(event)">
+                        <div class="admin-hamburger-line"></div>
+                        <div class="admin-hamburger-line"></div>
+                        <div class="admin-hamburger-line"></div>
+                    </button>
+                </div>
+                
+                <!-- Mobile Navigation -->
+                <div class="admin-mobile-nav" id="adminMobileNav">
+                    <a href="~/Pages/Home.aspx" runat="server" class="admin-mobile-link">
+                        <span>🏠</span> Home
+                    </a>
+                    <a href="~/Pages/Admin/Dashboard/AdminInfo.aspx" runat="server" class="admin-mobile-link">
+                        <span>👤</span> Admin Info
+                    </a>
+                    <a href="~/Pages/Admin/Dashboard/ShowcaseList.aspx" runat="server" class="admin-mobile-link active">
+                        <span>📁</span> Showcase List
+                    </a>
+                    <a href="~/Pages/Admin/Dashboard/UserFeedbacks.aspx" runat="server" class="admin-mobile-link">
+                        <span>💬</span> User Feedbacks
+                    </a>
                 </div>
             </nav>
-
-            <!-- Stats Dashboard -->
-            <section class="stats-section">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-content">
-                            <div class="stat-number"><asp:Literal ID="LiteralTotalProjects" runat="server" /></div>
-                            <div class="stat-label">Total Projects</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-content">
-                            <div class="stat-number"><asp:Literal ID="LiteralWithLinks" runat="server" /></div>
-                            <div class="stat-label">With External Links</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- Message Panel -->
             <div id="messageContainer" class="message-container" style="display: none;">
@@ -752,7 +1119,6 @@
             <!-- Tab Navigation -->
             <div class="tabs-container">
                 <button type="button" class="tab-btn active" onclick="showTab('gallery')">Project Gallery</button>
-                <%-- <button type="button" class="tab-btn" onclick="showTab('manage')">Manage Projects</button> --%>
                 <button type="button" class="tab-btn" onclick="showTab('add')">Add New Project</button>
             </div>
 
@@ -778,14 +1144,14 @@
                                 <div class="project-header">
                                     <span class="project-type"><%# Eval("type") %></span>
                                     <div class="project-actions">
-                                        <button type="button" onclick="editProject(<%# Eval("id") %>)" class="action-btn edit-btn" title="Edit Project">✏️</button>
-                                        <button type="button" class="action-btn delete-btn" data-project-id='<%# Eval("id") %>' data-project-title='<%# Eval("title") %>' onclick="deleteProjectSafe(this)" title="Delete Project">🗑️</button>
+                                        <button type="button" class="action-btn edit-btn" title="Edit Project" data-project-id='<%# Eval("id") %>' data-project-title='<%# Eval("title") %>'>✏️</button>
+                                        <button type="button" class="action-btn delete-btn" title="Delete Project" data-project-id='<%# Eval("id") %>' data-project-title='<%# Eval("title") %>' onclick="deleteProjectSafe(this)">🗑️</button>
                                     </div>
                                 </div>
                                 
                                 <div class="project-image">
                                     <%# !string.IsNullOrEmpty(Eval("url_cover_image")?.ToString()) ?
-                                            "<img src='" + Eval("url_cover_image") + "' alt='" + Eval("title") + "' onerror=\"this.parentElement.innerHTML='<div class=\\'no-image\\'>📷 No Image</div>';\" />" :
+                                            "<img src='" + Eval("url_cover_image") + "' alt='" + Eval("title") + "' onerror=\"handleImageError(this)\" />" :
                                             "<div class='no-image'>📷 No Image</div>" %>
                                 </div>
                                 
@@ -810,79 +1176,68 @@
                     <p>No projects match your search criteria. Try adjusting your filters or add a new project.</p>
                 </div>
             </div>
-
-            <!-- Manage/Edit Tab -->
-            <div id="manageTab" class="tab-content">
-                <div class="manage-header">
-                    <h2>Edit Existing Project</h2>
-                    <p>Enter a Project ID to load and edit an existing project</p>
-                </div>
-                
-                <div class="load-section">
-                    <div class="load-group">
-                        <asp:TextBox ID="txtLoadProjectId" runat="server" CssClass="load-input" placeholder="Enter Project ID" />
-                        <asp:Button ID="btnLoadProject" runat="server" Text="Load Project" CssClass="load-btn" OnClick="btnLoadProject_Click" />
+            
+            <!-- Hidden Edit Form Modal -->
+            <div id="editFormModal" class="tab-content" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 2000; padding: 2rem; overflow-y: auto;">
+                <div style="max-width: 800px; margin: 0 auto; background: var(--slate-800); border-radius: 16px; border: 1px solid var(--slate-700); padding: 2rem;">
+                    <div class="manage-header">
+                        <h2>Edit Project</h2>
+                        <p>Update the project details below</p>
                     </div>
-                </div>
-
-                <div id="editForm" class="form-container" style="display: none;">
-                    <asp:HiddenField ID="hfEditProjectId" runat="server" />
                     
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Project Type *</label>
-                            <asp:DropDownList ID="ddlEditType" runat="server" CssClass="form-select">
-                                <asp:ListItem Value="" Text="Select Project Type"></asp:ListItem>
-                                <asp:ListItem Value="Web Development" Text="Web Development"></asp:ListItem>
-                                <asp:ListItem Value="Mobile App" Text="Mobile App"></asp:ListItem>
-                                <asp:ListItem Value="Desktop Application" Text="Desktop Application"></asp:ListItem>
-                                <asp:ListItem Value="Game Development" Text="Game Development"></asp:ListItem>
-                                <asp:ListItem Value="AI/ML" Text="AI/ML"></asp:ListItem>
-                                <asp:ListItem Value="Data Science" Text="Data Science"></asp:ListItem>
-                                <asp:ListItem Value="Other" Text="Other"></asp:ListItem>
-                            </asp:DropDownList>
+                    <div class="form-container">
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Project Type *</label>
+                                <asp:DropDownList ID="ddlEditType" runat="server" CssClass="form-select">
+                                    <asp:ListItem Value="" Text="Select Project Type"></asp:ListItem>
+                                    <asp:ListItem Value="feature" Text="Feature"></asp:ListItem>
+                                    <asp:ListItem Value="general" Text="General"></asp:ListItem>
+                                </asp:DropDownList>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Project Title *</label>
+                                <asp:TextBox ID="txtEditTitle" runat="server" CssClass="form-input" placeholder="Enter project title" />
+                            </div>
+
+                            <div class="form-group span-2">
+                                <label class="form-label">Project Description</label>
+                                <asp:TextBox ID="txtEditDescription" runat="server" CssClass="form-textarea" TextMode="MultiLine" Rows="4" placeholder="Enter detailed project description..." />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Cover Image URL</label>
+                                <asp:TextBox ID="txtEditCoverImage" runat="server" CssClass="form-input" placeholder="https://example.com/image.jpg" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">GitHub Repository</label>
+                                <asp:TextBox ID="txtEditGithub" runat="server" CssClass="form-input" placeholder="https://github.com/username/repo" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Google Drive Link</label>
+                                <asp:TextBox ID="txtEditDrive" runat="server" CssClass="form-input" placeholder="https://drive.google.com/..." />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">YouTube Video</label>
+                                <asp:TextBox ID="txtEditYoutube" runat="server" CssClass="form-input" placeholder="https://youtube.com/watch?v=..." />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Other Link</label>
+                                <asp:TextBox ID="txtEditOther" runat="server" CssClass="form-input" placeholder="Any other relevant link" />
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Project Title *</label>
-                            <asp:TextBox ID="txtEditTitle" runat="server" CssClass="form-input" placeholder="Enter project title" />
+                        <div class="form-actions">
+                            <asp:Button ID="btnUpdateProject" runat="server" Text="💾 Update Project" CssClass="btn-success" OnClick="btnUpdateProject_Click" />
+                            <asp:Button ID="btnDeleteProject" runat="server" Text="🗑️ Delete Project" CssClass="btn-danger" OnClick="btnDeleteProject_Click" OnClientClick="return confirmDelete();" />
+                            <button type="button" onclick="closeEditModal()" class="btn-secondary">❌ Cancel</button>
                         </div>
-
-                        <div class="form-group span-2">
-                            <label class="form-label">Project Description</label>
-                            <asp:TextBox ID="txtEditDescription" runat="server" CssClass="form-textarea" TextMode="MultiLine" Rows="4" placeholder="Enter detailed project description..." />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Cover Image URL</label>
-                            <asp:TextBox ID="txtEditCoverImage" runat="server" CssClass="form-input" placeholder="https://example.com/image.jpg" />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">GitHub Repository</label>
-                            <asp:TextBox ID="txtEditGithub" runat="server" CssClass="form-input" placeholder="https://github.com/username/repo" />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Google Drive Link</label>
-                            <asp:TextBox ID="txtEditDrive" runat="server" CssClass="form-input" placeholder="https://drive.google.com/..." />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">YouTube Video</label>
-                            <asp:TextBox ID="txtEditYoutube" runat="server" CssClass="form-input" placeholder="https://youtube.com/watch?v=..." />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Other Link</label>
-                            <asp:TextBox ID="txtEditOther" runat="server" CssClass="form-input" placeholder="Any other relevant link" />
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <asp:Button ID="btnUpdateProject" runat="server" Text="💾 Update Project" CssClass="btn-success" OnClick="btnUpdateProject_Click" />
-                        <asp:Button ID="btnDeleteProject" runat="server" Text="🗑️ Delete Project" CssClass="btn-danger" OnClick="btnDeleteProject_Click" OnClientClick="return confirmDelete();" />
-                        <button type="button" onclick="cancelEdit()" class="btn-secondary">❌ Cancel</button>
                     </div>
                 </div>
             </div>
@@ -951,6 +1306,53 @@
     </form>
 
     <script type="text/javascript">
+        function toggleAdminMobileMenu(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const mobileNav = document.getElementById('adminMobileNav');
+            const toggle = document.querySelector('.admin-mobile-menu-toggle');
+            
+            if (!mobileNav || !toggle) {
+                console.error('Mobile navigation elements not found');
+                return;
+            }
+            
+            if (mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
+                toggle.classList.remove('active');
+            } else {
+                mobileNav.classList.add('active');
+                toggle.classList.add('active');
+            }
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileNav = document.getElementById('adminMobileNav');
+            const toggle = document.querySelector('.admin-mobile-menu-toggle');
+            
+            if (mobileNav && mobileNav.classList.contains('active') && 
+                !mobileNav.contains(event.target) && 
+                !toggle.contains(event.target)) {
+                mobileNav.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const mobileNav = document.getElementById('adminMobileNav');
+                const toggle = document.querySelector('.admin-mobile-menu-toggle');
+                
+                if (mobileNav && toggle) {
+                    mobileNav.classList.remove('active');
+                    toggle.classList.remove('active');
+                }
+            }
+        });
+
         function showTab(tabName) {
             // Hide all tabs
             let tabs = document.querySelectorAll('.tab-content');
@@ -973,20 +1375,60 @@
         }
 
         function editProject(projectId) {
-            // Set the project ID and switch to manage tab
-            document.getElementById('<%= txtLoadProjectId.ClientID %>').value = projectId;
-            
-            // Trigger load project
-            document.getElementById('<%= btnLoadProject.ClientID %>').click();
-            
-            // Switch to manage tab
-            // showTab('manage');
+            try {
+                console.log('Edit project called with ID:', projectId);
+                
+                // Set the project ID
+                var hiddenField = document.getElementById('<%= hfEditProjectId.ClientID %>');
+                if (!hiddenField) {
+                    console.error('Hidden field not found');
+                    return;
+                }
+                hiddenField.value = projectId;
+                
+                // Trigger postback using the hidden button
+                var loadButton = document.getElementById('<%= btnLoadProjectForEdit.ClientID %>');
+                if (!loadButton) {
+                    console.error('Load button not found');
+                    return;
+                }
+                
+                console.log('Triggering postback...');
+                loadButton.click();
+                
+            } catch (error) {
+                console.error('Error in editProject:', error);
+                alert('Error loading project: ' + error.message);
+            }
+        }
+        
+        function showLoadingOverlay(message) {
+            const overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.id = 'loadingOverlay';
+            overlay.innerHTML = message;
+            document.body.appendChild(overlay);
+        }
+        
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+        
+        function showEditModal() {
+            document.getElementById('editFormModal').style.display = 'block';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editFormModal').style.display = 'none';
+            document.getElementById('<%= hfEditProjectId.ClientID %>').value = '';
         }
 
         function deleteProject(projectId, projectTitle) {
             if (confirm('Are you sure you want to delete "' + projectTitle + '"?\n\nThis action cannot be undone.')) {
-                // Set the project ID and trigger delete
-                document.getElementById('<%= txtLoadProjectId.ClientID %>').value = projectId;
+                // Set the project ID in the hidden field and trigger delete
                 document.getElementById('<%= hfEditProjectId.ClientID %>').value = projectId;
                 document.getElementById('<%= btnDeleteProject.ClientID %>').click();
             }
@@ -1001,14 +1443,6 @@
         function confirmDelete() {
             let title = document.getElementById('<%= txtEditTitle.ClientID %>').value;
             return confirm('Are you sure you want to delete "' + title + '"?\n\nThis action cannot be undone.');
-        }
-
-        function cancelEdit() {
-            // Clear the edit form
-            document.getElementById('<%= txtLoadProjectId.ClientID %>').value = '';
-            document.getElementById('<%= hfEditProjectId.ClientID %>').value = '';
-            document.getElementById('editForm').style.display = 'none';
-            hideMessage();
         }
 
         function clearAddForm() {
@@ -1054,6 +1488,18 @@
         }
 
         // Handle server messages
+        // Handle image loading errors
+        function handleImageError(img) {
+            img.parentElement.innerHTML = '<div class="no-image">📷 No Image</div>';
+        }
+
+        // Add event delegation for edit buttons
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('edit-btn') && event.target.dataset.projectId) {
+                editProject(event.target.dataset.projectId);
+            }
+        });
+
         window.addEventListener('load', function() {
             let messageText = '<%= LiteralMessage.Text %>';
             if (messageText && messageText.trim() !== '') {

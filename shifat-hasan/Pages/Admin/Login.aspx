@@ -1,9 +1,11 @@
-<%@ Page Title="Login" Language="C#" CodeBehind="Login.aspx.cs" Inherits="shifat_hasan.Pages.Admin.Login" %>
+<%@ Page Title="Login" Language="C#" CodeBehind="Login.aspx.cs" Inherits="shifat_hasan.Pages.Admin.Login" ResponseEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head runat="server">
     <title>Admin Sign-In</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
         * {
             margin: 0;
@@ -11,9 +13,48 @@
             box-sizing: border-box;
         }
 
+        :root {
+            /* Dark Theme Slate Color Palette */
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+            
+            /* Accent Colors */
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-error: #ef4444;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            --gradient-dark: linear-gradient(135deg, var(--slate-800), var(--slate-900));
+            --gradient-card: linear-gradient(135deg, var(--slate-800), var(--slate-700));
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+            --transition-slow: 0.5s ease-in-out;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gradient-dark);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -41,15 +82,14 @@
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--gradient-card);
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 40px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.25),
-                0 0 0 1px rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid var(--slate-700);
             position: relative;
             z-index: 2;
             animation: slideUp 0.8s ease-out;
@@ -74,13 +114,13 @@
         .admin-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: var(--shadow-lg);
             animation: pulse 2s infinite;
         }
 
@@ -98,13 +138,13 @@
         .login-title {
             font-size: 28px;
             font-weight: 700;
-            color: #2d3748;
+            color: var(--slate-100);
             margin-bottom: 8px;
             letter-spacing: -0.5px;
         }
 
         .login-subtitle {
-            color: #718096;
+            color: var(--slate-400);
             font-size: 16px;
             font-weight: 400;
         }
@@ -121,7 +161,7 @@
         .form-label {
             display: block;
             margin-bottom: 8px;
-            color: #4a5568;
+            color: var(--slate-300);
             font-weight: 600;
             font-size: 14px;
             letter-spacing: 0.025em;
@@ -130,24 +170,24 @@
         .form-input {
             width: 100%;
             padding: 16px 20px 16px 50px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--slate-700);
             border-radius: 12px;
             font-size: 16px;
-            background: #f8fafc;
-            transition: all 0.3s ease;
+            background: var(--slate-800);
+            transition: var(--transition-normal);
             outline: none;
-            color: #2d3748;
+            color: var(--slate-100);
         }
 
         .form-input:focus {
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-primary);
+            background: var(--slate-900);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
             transform: translateY(-1px);
         }
 
         .form-input::placeholder {
-            color: #a0aec0;
+            color: var(--slate-500);
             font-weight: 400;
         }
 
@@ -158,28 +198,28 @@
             transform: translateY(-50%);
             width: 20px;
             height: 20px;
-            fill: #a0aec0;
-            transition: all 0.3s ease;
+            fill: var(--slate-500);
+            transition: var(--transition-normal);
             pointer-events: none;
             margin-top: 16px;
         }
 
         .form-group-icon:focus-within .input-icon {
-            fill: #667eea;
+            fill: var(--accent-primary);
             transform: translateY(-50%) scale(1.1);
         }
 
         .btn-signin {
             width: 100%;
             padding: 16px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition-normal);
             position: relative;
             overflow: hidden;
             margin-bottom: 20px;
@@ -189,7 +229,7 @@
 
         .btn-signin:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            box-shadow: var(--shadow-xl);
         }
 
         .btn-signin:active {
@@ -225,20 +265,20 @@
             width: 100%;
             text-align: center;
             padding: 12px 24px;
-            color: #667eea;
+            color: var(--accent-primary);
             text-decoration: none;
-            border: 2px solid #667eea;
+            border: 2px solid var(--accent-primary);
             border-radius: 12px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: var(--transition-normal);
             background: transparent;
         }
 
         .btn-home:hover {
-            background: #667eea;
+            background: var(--accent-primary);
             color: white;
             transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            box-shadow: var(--shadow-md);
         }
 
         /* Alert Styles */
@@ -265,13 +305,13 @@
         }
 
         .alert-success {
-            background: linear-gradient(135deg, #48bb78, #38a169);
+            background: var(--accent-success);
             color: white;
             border: none;
         }
 
         .alert-error {
-            background: linear-gradient(135deg, #f56565, #e53e3e);
+            background: var(--accent-error);
             color: white;
             border: none;
         }
@@ -327,39 +367,12 @@
             }
         }
 
-        /* Dark theme support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            }
-
-            .login-container {
-                background: rgba(26, 32, 44, 0.95);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .login-title {
-                color: #f7fafc;
-            }
-
-            .login-subtitle {
-                color: #a0aec0;
-            }
-
-            .form-label {
-                color: #e2e8f0;
-            }
-
-            .form-input {
-                background: #2d3748;
-                border-color: #4a5568;
-                color: #f7fafc;
-            }
-
-            .form-input:focus {
-                background: #374151;
-                border-color: #667eea;
-            }
+        /* Focus Styles */
+        .form-input:focus,
+        .btn-signin:focus,
+        .btn-home:focus {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
         }
 
         /* Loading animation for better UX */

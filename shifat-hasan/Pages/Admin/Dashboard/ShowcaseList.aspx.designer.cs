@@ -24,22 +24,31 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// LiteralTotalProjects control.
+        /// ScriptManager1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal LiteralTotalProjects;
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
-        /// LiteralWithLinks control.
+        /// hfEditProjectId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal LiteralWithLinks;
+        protected global::System.Web.UI.WebControls.HiddenField hfEditProjectId;
+
+        /// <summary>
+        /// btnLoadProjectForEdit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLoadProjectForEdit;
 
         /// <summary>
         /// LiteralMessage control.
@@ -94,33 +103,6 @@ namespace shifat_hasan.Pages.Admin.Dashboard
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater ProjectsRepeater;
-
-        /// <summary>
-        /// txtLoadProjectId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLoadProjectId;
-
-        /// <summary>
-        /// btnLoadProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLoadProject;
-
-        /// <summary>
-        /// hfEditProjectId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hfEditProjectId;
 
         /// <summary>
         /// ddlEditType control.

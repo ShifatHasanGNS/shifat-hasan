@@ -5,7 +5,8 @@
 <html lang="en">
 <head runat="server">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Md. Shifat Hasan | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,16 +17,56 @@
             box-sizing: border-box;
         }
         
+        :root {
+            /* Dark Theme Slate Color Palette */
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+            
+            /* Accent Colors */
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-error: #ef4444;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            --gradient-dark: linear-gradient(135deg, var(--slate-800), var(--slate-900));
+            --gradient-card: linear-gradient(135deg, var(--slate-800), var(--slate-700));
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+            --transition-slow: 0.5s ease-in-out;
+        }
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #2d3748;
-            background-color: #ffffff;
+            color: var(--slate-100);
+            background: var(--gradient-dark);
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         
         /* Background Elements */
@@ -35,7 +76,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23667eea" fill-opacity="0.02"><circle cx="30" cy="30" r="1.5"/></g></svg>');
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%233b82f6" fill-opacity="0.03"><circle cx="30" cy="30" r="1.5"/></g></svg>');
             pointer-events: none;
             z-index: -2;
         }
@@ -46,7 +87,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
             pointer-events: none;
             z-index: -1;
         }
@@ -57,22 +98,21 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-            z-index: 1000;
-            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-sm);
         }
         
         .header-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 1rem 1.5rem;
+            justify-content: space-between;
+            height: 70px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.5rem;
-            height: 70px;
         }
         
         .header-title {
@@ -86,7 +126,7 @@
             font-family: 'Poppins', sans-serif;
             font-size: 1.25rem;
             font-weight: 600;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: var(--gradient-primary);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -94,7 +134,7 @@
         
         .header-title-sub {
             font-size: 0.75rem;
-            color: #718096;
+            color: var(--slate-400);
             font-weight: 400;
             margin-top: -2px;
         }
@@ -108,12 +148,12 @@
         
         .header-link {
             text-decoration: none;
-            color: #4a5568;
+            color: var(--slate-300);
             font-weight: 500;
             font-size: 0.95rem;
             position: relative;
             padding: 0.5rem 0;
-            transition: all 0.3s ease-in-out;
+            transition: var(--transition-normal);
         }
         
         .link-text {
@@ -127,14 +167,14 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: var(--gradient-primary);
             transform: scaleX(0);
             transform-origin: left;
-            transition: transform 0.3s ease-in-out;
+            transition: var(--transition-normal);
         }
         
         .header-link:hover {
-            color: #667eea;
+            color: var(--accent-primary);
         }
         
         .header-link:hover .link-underline {
@@ -157,13 +197,13 @@
         .hamburger-line {
             width: 24px;
             height: 2px;
-            background: #4a5568;
-            transition: all 0.3s ease-in-out;
+            background: var(--slate-300);
+            transition: var(--transition-normal);
             transform-origin: center;
         }
         
         .mobile-menu-toggle:hover {
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(59, 130, 246, 0.1);
         }
         
         .mobile-menu-toggle.active .hamburger-line:first-child {
@@ -184,10 +224,10 @@
             top: 70px;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
             display: flex;
             flex-direction: column;
             gap: 0;
@@ -195,7 +235,8 @@
             transform: translateY(-100%);
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease-in-out;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
         }
         
         .mobile-nav.active {
@@ -207,10 +248,10 @@
         .mobile-link {
             padding: 1rem 1.5rem;
             text-decoration: none;
-            color: #4a5568;
+            color: var(--slate-300);
             font-weight: 500;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
-            transition: all 0.3s ease-in-out;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            transition: var(--transition-normal);
             position: relative;
             overflow: hidden;
         }
@@ -222,8 +263,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-            transition: left 0.5s ease-in-out;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: var(--transition-slow);
         }
         
         .mobile-link:hover::before {
@@ -231,8 +272,8 @@
         }
         
         .mobile-link:hover {
-            color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
+            color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.05);
         }
         
         .mobile-link:last-child {
@@ -249,12 +290,14 @@
         
         .content-container {
             min-height: calc(100vh - 140px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
         }
         
         /* Footer Styles */
         .footer {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
             margin-top: auto;
         }
         
@@ -267,6 +310,7 @@
             padding: 1.5rem;
             flex-wrap: wrap;
             gap: 1rem;
+            text-align: center;
         }
         
         .footer-content {
@@ -275,24 +319,24 @@
         
         .footer-text {
             margin: 0;
-            color: #718096;
+            color: var(--slate-400);
             font-size: 0.875rem;
         }
         
         .footer a {
-            color: #667eea;
+            color: var(--accent-primary);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: 0.375rem;
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            transition: all 0.3s ease-in-out;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: var(--transition-normal);
         }
         
         .footer a:hover {
-            background: rgba(102, 126, 234, 0.1);
-            border-color: rgba(102, 126, 234, 0.4);
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.4);
             transform: translateY(-1px);
         }
         
@@ -385,61 +429,68 @@
            }
         }
         
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                color: #f7fafc;
-                background-color: #1a202c;
-            }
-            
-            .bg-gradient {
-                background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-            }
-            
-            .header {
-                background: rgba(26, 32, 44, 0.95);
-                border-bottom: 1px solid rgba(74, 85, 104, 0.8);
-            }
-            
-            .header-title-sub {
-                color: #cbd5e0;
-            }
-            
-            .header-link {
-                color: #e2e8f0;
-            }
-            
-            .header-link:hover {
-                color: #667eea;
-            }
-            
-            .hamburger-line {
-                background: #e2e8f0;
-            }
-            
-            .mobile-nav {
-                background: rgba(26, 32, 44, 0.98);
-                border-bottom: 1px solid rgba(74, 85, 104, 0.8);
-            }
-            
-            .mobile-link {
-                color: #e2e8f0;
-                border-bottom: 1px solid rgba(74, 85, 104, 0.5);
-            }
-            
-            .mobile-link:hover {
-                color: #667eea;
-                background: rgba(102, 126, 234, 0.1);
-            }
-            
-            .footer {
-                background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-                border-top: 1px solid rgba(74, 85, 104, 0.8);
-            }
-            
-            .footer-text {
-                color: #cbd5e0;
-            }
+        /* Focus Styles */
+        .header-link:focus,
+        .mobile-link:focus,
+        .mobile-menu-toggle:focus,
+        .footer a:focus {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
+        }
+
+        /* Subtle animations and interactions */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .pulse-on-hover:hover {
+            animation: pulse 0.3s ease-in-out;
+        }
+
+        /* Smooth transitions for interactive elements */
+        .header-link, .mobile-link {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-link::before, .mobile-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .header-link:hover::before, .mobile-link:hover::before {
+            left: 100%;
         }
         
         /* Print Styles */
@@ -461,6 +512,79 @@
                 color: black !important;
             }
         }
+        
+        /*Scroll to Top*/
+        .back-to-top {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          width: 50px;
+          height: 50px;
+          background: var(--gradient-primary);
+          border: none;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: var(--shadow-lg);
+          z-index: 1000;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(20px);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .back-to-top.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+          transform: translateY(-5px) scale(1.1);
+          box-shadow: var(--shadow-2xl);
+        }
+        
+        .back-to-top svg {
+          width: 24px;
+          height: 24px;
+          color: white;
+          transition: transform 0.3s ease;
+        }
+        
+        .back-to-top:hover svg {
+          transform: translateY(-2px);
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+          .back-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+          }
+          
+          .back-to-top svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .back-to-top {
+            bottom: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+          }
+          
+          .back-to-top svg {
+            width: 18px;
+            height: 18px;
+          }
+        }
     </style>
     
     <asp:ContentPlaceHolder ID="head" runat="server"/>
@@ -478,19 +602,8 @@
                     <span class="header-title-main">Md. Shifat Hasan</span>
                     <span class="header-title-sub">Portfolio</span>
                 </a>
-                <nav class="nav">
-                    <a class="header-link" href='<%= ResolveUrl("~/Pages/Home.aspx") %>'>
-                        <span class="link-text">Home</span>
-                        <span class="link-underline"></span>
-                    </a>
-                    <a class="header-link" href='<%= ResolveUrl("~/Pages/Projects.aspx") %>'>
-                        <span class="link-text">Projects</span>
-                        <span class="link-underline"></span>
-                    </a>
-                    <a class="header-link" href='<%= ResolveUrl("~/Pages/Contact.aspx") %>'>
-                        <span class="link-text">Contact</span>
-                        <span class="link-underline"></span>
-                    </a>
+                <nav class="nav" id="mainNav">
+                    <!-- Navigation will be populated by JavaScript based on current page -->
                 </nav>
                 <button class="mobile-menu-toggle" type="button" aria-label="Toggle mobile menu">
                     <span class="hamburger-line"></span>
@@ -501,10 +614,8 @@
         </header>
         
         <!-- Mobile Navigation -->
-        <nav class="mobile-nav">
-            <a class="mobile-link" href='<%= ResolveUrl("~/Pages/Home.aspx") %>'>Home</a>
-            <a class="mobile-link" href='<%= ResolveUrl("~/Pages/Projects.aspx") %>'>Projects</a>
-            <a class="mobile-link" href='<%= ResolveUrl("~/Pages/Contact.aspx") %>'>Contact</a>
+        <nav class="mobile-nav" id="mobileNav">
+            <!-- Mobile navigation will be populated by JavaScript based on current page -->
         </nav>
         
         <!-- Main Content -->
@@ -522,19 +633,67 @@
                         &copy; <%= DateTime.Now.Year %> Md. Shifat Hasan. All rights reserved.
                     </p>
                 </div>
-                <div>
-                    <a href='<%= ResolveUrl("~/Pages/Admin/Login.aspx") %>'>
-                        System Administration
-                    </a>
-                </div>
             </div>
         </footer>
+        
+        <button class="back-to-top" type="button" title="Back to Top" aria-label="Scroll to top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m18 15-6-6-6 6"/>
+            </svg>
+        </button>
         
         <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
     </form>
 
     <script type="text/javascript">
+        // Navigation configuration
+        const navigationConfig = {
+            public: [
+                { name: 'Home', url: '<%= ResolveUrl("~/Pages/Home.aspx") %>' },
+                { name: 'Projects', url: '<%= ResolveUrl("~/Pages/Projects.aspx") %>' },
+                { name: 'Contact', url: '<%= ResolveUrl("~/Pages/Contact.aspx") %>' }
+            ],
+            admin: [
+                { name: 'Home', url: '<%= ResolveUrl("~/Pages/Home.aspx") %>' },
+                { name: 'AdminInfo', url: '<%= ResolveUrl("~/Pages/Admin/Dashboard/AdminInfo.aspx") %>' },
+                { name: 'ShowcaseList', url: '<%= ResolveUrl("~/Pages/Admin/Dashboard/ShowcaseList.aspx") %>' },
+                { name: 'UserFeedbacks', url: '<%= ResolveUrl("~/Pages/Admin/Dashboard/UserFeedbacks.aspx") %>' }
+            ]
+        };
+
+        function initializeNavigation() {
+            const currentPath = window.location.pathname.toLowerCase();
+            const isAdminPage = currentPath.includes('/admin/');
+            const isLoginPage = currentPath.includes('/login.aspx');
+            
+            // Don't show navigation on login page
+            if (isLoginPage) {
+                document.querySelector('.header').style.display = 'none';
+                document.querySelector('.main-content').style.paddingTop = '0';
+                return;
+            }
+            
+            const navItems = isAdminPage ? navigationConfig.admin : navigationConfig.public;
+            
+            // Populate desktop navigation
+            const mainNav = document.getElementById('mainNav');
+            mainNav.innerHTML = navItems.map(item => `
+                <a class="header-link" href="${item.url}">
+                    <span class="link-text">${item.name}</span>
+                    <span class="link-underline"></span>
+                </a>
+            `).join('');
+            
+            // Populate mobile navigation
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.innerHTML = navItems.map(item => `
+                <a class="mobile-link" href="${item.url}">${item.name}</a>
+            `).join('');
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+            initializeNavigation();
+            
             const mobileToggle = document.querySelector('.mobile-menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
             const body = document.body;
@@ -558,10 +717,9 @@
                     }
                 });
         
-                // Close mobile menu when clicking on a link
-                const mobileLinks = document.querySelectorAll('.mobile-link');
-                mobileLinks.forEach(function(link) {
-                    link.addEventListener('click', function (e) {
+                // Close mobile menu when clicking on a link (using event delegation)
+                mobileNav.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('mobile-link')) {
                         // Don't prevent default - let the link work
                         // Just close the menu
                         setTimeout(function () {
@@ -570,7 +728,7 @@
                             mobileToggle.classList.remove('active');
                             body.classList.remove('mobile-menu-open');
                         }, 100);
-                    });
+                    }
                 });
         
                 // Close menu when clicking outside
@@ -593,6 +751,52 @@
                     }
                 });
             }
+        });
+        
+        function initBackToTopButton() {
+          const backToTopButton = document.querySelector('.back-to-top');
+          
+          if (!backToTopButton) return;
+        
+          // Show/hide button based on scroll position
+          function toggleBackToTopButton() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            
+            // Show button when user has scrolled down more than one screen height
+            // and is not at the very bottom of the page
+            if (scrollTop > windowHeight && (scrollTop + windowHeight) < documentHeight - 100) {
+              backToTopButton.classList.add('show');
+            } else {
+              backToTopButton.classList.remove('show');
+            }
+          }
+        
+          // Smooth scroll to top
+          function scrollToTop() {
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
+          }
+        
+          // Event listeners
+          window.addEventListener('scroll', toggleBackToTopButton);
+          backToTopButton.addEventListener('click', scrollToTop);
+          
+          // Initial check
+          toggleBackToTopButton();
+        }
+        
+        // Initialize back to top button when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+          initBackToTopButton();
+        });
+        
+        // Fallback for older browsers
+        window.addEventListener('load', function() {
+          initBackToTopButton();
         });
     </script>
 </body>
