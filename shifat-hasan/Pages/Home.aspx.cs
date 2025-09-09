@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.UI;
-using Newtonsoft.Json;
 
 namespace shifat_hasan.Pages
 {
@@ -22,19 +21,12 @@ namespace shifat_hasan.Pages
             try
             {
                 var projects = GetProjectsFromDatabase();
-
-                // Bind to repeater
                 FeatureProjectsRepeater.DataSource = projects;
                 FeatureProjectsRepeater.DataBind();
-
-                // Serialize for JavaScript
-                var jsonData = JsonConvert.SerializeObject(projects);
-                FeatureProjectsJsonData.Value = jsonData;
             }
             catch (Exception ex)
             {
-                // Log error (you might want to implement proper logging)
-                Response.Write($"<script>console.error('Error loading projects: {ex.Message}');</script>");
+                Console.WriteLine("Error loading projects: " + ex.Message);
             }
         }
 
@@ -69,6 +61,55 @@ namespace shifat_hasan.Pages
 
             return projects;
         }
+
+        // Helper methods for display formatting
+        protected string TruncateText(string text, int maxLength)
+        {
+            if (string.IsNullOrEmpty(text))
+                return "No description available";
+
+            if (text.Length <= maxLength)
+                return Server.HtmlEncode(text);
+
+            return Server.HtmlEncode(text.Substring(0, maxLength)) + "...";
+        }
+
+        protected string FormatProjectLinks(string github, string drive, string youtube, string other)
+        {
+            var links = new List<string>();
+
+            if (!string.IsNullOrEmpty(github))
+            {
+                var encodedGithub = Server.HtmlEncode(github);
+                links.Add("<a href='" + encodedGithub +
+                          "' target='_blank' rel='noopener' class='link-github'>GitHub</a>");
+            }
+
+            if (!string.IsNullOrEmpty(drive))
+            {
+                var encodedDrive = Server.HtmlEncode(drive);
+                links.Add("<a href='" + encodedDrive +
+                          "' target='_blank' rel='noopener' class='link-drive'>Drive</a>");
+            }
+
+            if (!string.IsNullOrEmpty(youtube))
+            {
+                var encodedYoutube = Server.HtmlEncode(youtube);
+                links.Add("<a href='" + encodedYoutube +
+                          "' target='_blank' rel='noopener' class='link-youtube'>YouTube</a>");
+            }
+
+            if (!string.IsNullOrEmpty(other))
+            {
+                var encodedOther = Server.HtmlEncode(other);
+                links.Add(
+                    "<a href='" + encodedOther + "' target='_blank' rel='noopener' class='link-other'>Link</a>");
+            }
+
+            return links.Count > 0
+                ? string.Join(" ", links.ToArray())
+                : "<span class='no-links'>No external links</span>";
+        }
     }
 
     // Project model class
@@ -84,7 +125,7 @@ namespace shifat_hasan.Pages
         public string UrlYoutube { get; set; }
         public string UrlOther { get; set; }
 
-        // Database column name aliases for databinding
+        // Database column name aliases for data binding
         public int id => Id;
         public string type => Type;
         public string title => Title;

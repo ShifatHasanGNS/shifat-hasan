@@ -1,18 +1,18 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="shifat_hasan.Site" %>
 
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head runat="server">
+    <title>Md. Shifat Hasan | Portfolio</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Md. Shifat Hasan | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <style>        
+    <style>
         * {
             box-sizing: border-box;
         }
@@ -30,26 +30,26 @@
             --slate-800: #1e293b;
             --slate-900: #0f172a;
             --slate-950: #020617;
-            
+        
             /* Accent Colors */
             --accent-primary: #3b82f6;
             --accent-secondary: #8b5cf6;
             --accent-success: #10b981;
             --accent-warning: #f59e0b;
             --accent-error: #ef4444;
-            
+        
             /* Gradients */
             --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             --gradient-dark: linear-gradient(135deg, var(--slate-800), var(--slate-900));
             --gradient-card: linear-gradient(135deg, var(--slate-800), var(--slate-700));
-            
+        
             /* Shadows */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            
+        
             /* Transitions */
             --transition-fast: 0.15s ease-in-out;
             --transition-normal: 0.3s ease-in-out;
@@ -283,7 +283,7 @@
         /* Main Content */
         .main-content {
             min-height: 100vh;
-            padding-top: 70px;
+            padding-top: 30px;
             position: relative;
             z-index: 1;
         }
@@ -324,7 +324,7 @@
         }
         
         .footer a {
-            color: var(--accent-primary);
+            color: var(--slate-400);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
@@ -350,29 +350,29 @@
             .nav {
                 display: none;
             }
-            
+        
             .mobile-menu-toggle {
                 display: flex;
             }
-            
+        
             .header-container {
                 padding: 1rem;
             }
-            
+        
             .header-title-main {
                 font-size: 1.1rem;
             }
-            
+        
             .header-title-sub {
                 font-size: 0.7rem;
             }
-            
+        
             .footer-container {
                 flex-direction: column;
                 text-align: center;
                 gap: 1rem;
             }
-            
+        
             .footer-text {
                 text-align: center;
             }
@@ -382,12 +382,12 @@
             .header-container {
                 padding: 0.75rem;
             }
-            
+        
             .mobile-link {
                 padding: 0.875rem 1rem;
                 font-size: 0.95rem;
             }
-            
+        
             .footer-container {
                 padding: 1rem;
             }
@@ -413,20 +413,20 @@
         
         /* High Contrast Mode */
         @media (prefers-contrast: more) {
-           .header {
-               background: #ffffff;
-               border-bottom: 2px solid #000000;
-           }
-                        
-           .mobile-nav {
-               background: #ffffff;
-               border-bottom: 2px solid #000000;
-           }
-                        
-           .footer {
-               background: #f7fafc;
-               border-top: 2px solid #000000;
-           }
+            .header {
+                background: #ffffff;
+                border-bottom: 2px solid #000000;
+            }
+        
+            .mobile-nav {
+                background: #ffffff;
+                border-bottom: 2px solid #000000;
+            }
+        
+            .footer {
+                background: #f7fafc;
+                border-top: 2px solid #000000;
+            }
         }
         
         /* Focus Styles */
@@ -437,47 +437,67 @@
             outline: 2px solid var(--accent-primary);
             outline-offset: 2px;
         }
-
+        
         /* Subtle animations and interactions */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
+        
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-
+        
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
-
+        
         @keyframes shimmer {
-            0% { background-position: -200px 0; }
-            100% { background-position: calc(200px + 100%) 0; }
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
         }
-
+        
         /* Animation classes */
         .fade-in {
             animation: fadeIn 0.6s ease-out;
         }
-
+        
         .slide-in {
             animation: slideIn 0.5s ease-out;
         }
-
+        
         .pulse-on-hover:hover {
             animation: pulse 0.3s ease-in-out;
         }
-
+        
         /* Smooth transitions for interactive elements */
         .header-link, .mobile-link {
             position: relative;
             overflow: hidden;
         }
-
+        
         .header-link::before, .mobile-link::before {
             content: '';
             position: absolute;
@@ -488,7 +508,7 @@
             background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
             transition: left 0.5s;
         }
-
+        
         .header-link:hover::before, .mobile-link:hover::before {
             left: 100%;
         }
@@ -502,11 +522,11 @@
             .bg-gradient {
                 display: none !important;
             }
-            
+        
             .main-content {
                 padding-top: 0;
             }
-            
+        
             body {
                 background: white !important;
                 color: black !important;
@@ -515,80 +535,81 @@
         
         /*Scroll to Top*/
         .back-to-top {
-          position: fixed;
-          bottom: 30px;
-          right: 30px;
-          width: 50px;
-          height: 50px;
-          background: var(--gradient-primary);
-          border: none;
-          border-radius: 50%;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: var(--shadow-lg);
-          z-index: 1000;
-          opacity: 0;
-          visibility: hidden;
-          transform: translateY(20px);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .back-to-top.show {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
         
         .back-to-top:hover {
-          transform: translateY(-5px) scale(1.1);
-          box-shadow: var(--shadow-2xl);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: var(--shadow-2xl);
         }
         
         .back-to-top svg {
-          width: 24px;
-          height: 24px;
-          color: white;
-          transition: transform 0.3s ease;
+            width: 24px;
+            height: 24px;
+            color: white;
+            transition: transform 0.3s ease;
         }
         
         .back-to-top:hover svg {
-          transform: translateY(-2px);
+            transform: translateY(-2px);
         }
         
         /* Mobile responsive adjustments */
         @media (max-width: 768px) {
-          .back-to-top {
-            bottom: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-          }
-          
-          .back-to-top svg {
-            width: 20px;
-            height: 20px;
-          }
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+            }
+        
+            .back-to-top svg {
+                width: 20px;
+                height: 20px;
+            }
         }
         
         @media (max-width: 480px) {
-          .back-to-top {
-            bottom: 15px;
-            right: 15px;
-            width: 40px;
-            height: 40px;
-          }
-          
-          .back-to-top svg {
-            width: 18px;
-            height: 18px;
-          }
+            .back-to-top {
+                bottom: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+            }
+        
+            .back-to-top svg {
+                width: 18px;
+                height: 18px;
+            }
         }
     </style>
     
-    <asp:ContentPlaceHolder ID="head" runat="server"/>
+    <asp:ContentPlaceHolder ID="head" runat="server" />
 </head>
+
 <body>
     <form id="form1" runat="server">
         <!-- Background Elements -->
@@ -630,7 +651,9 @@
             <div class="footer-container">
                 <div class="footer-content">
                     <p class="footer-text">
-                        &copy; <%= DateTime.Now.Year %> Md. Shifat Hasan. All rights reserved.
+                        <a href='<%= ResolveUrl("~/Pages/Admin/Login.aspx") %>'>
+                            &copy; <%= DateTime.Now.Year %> Md. Shifat Hasan. All rights reserved.
+                        </a>
                     </p>
                 </div>
             </div>
@@ -660,40 +683,40 @@
                 { name: 'UserFeedbacks', url: '<%= ResolveUrl("~/Pages/Admin/Dashboard/UserFeedbacks.aspx") %>' }
             ]
         };
-
+        
         function initializeNavigation() {
             const currentPath = window.location.pathname.toLowerCase();
             const isAdminPage = currentPath.includes('/admin/');
             const isLoginPage = currentPath.includes('/login.aspx');
-            
+        
             // Don't show navigation on login page
             if (isLoginPage) {
                 document.querySelector('.header').style.display = 'none';
                 document.querySelector('.main-content').style.paddingTop = '0';
                 return;
             }
-            
+        
             const navItems = isAdminPage ? navigationConfig.admin : navigationConfig.public;
-            
+        
             // Populate desktop navigation
             const mainNav = document.getElementById('mainNav');
             mainNav.innerHTML = navItems.map(item => `
-                <a class="header-link" href="${item.url}">
-                    <span class="link-text">${item.name}</span>
-                    <span class="link-underline"></span>
-                </a>
-            `).join('');
-            
+                        <a class="header-link" href="${item.url}">
+                            <span class="link-text">${item.name}</span>
+                            <span class="link-underline"></span>
+                        </a>
+                    `).join('');
+        
             // Populate mobile navigation
             const mobileNav = document.getElementById('mobileNav');
             mobileNav.innerHTML = navItems.map(item => `
-                <a class="mobile-link" href="${item.url}">${item.name}</a>
-            `).join('');
+                        <a class="mobile-link" href="${item.url}">${item.name}</a>
+                    `).join('');
         }
-
+        
         document.addEventListener('DOMContentLoaded', function () {
             initializeNavigation();
-            
+        
             const mobileToggle = document.querySelector('.mobile-menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
             const body = document.body;
@@ -754,49 +777,49 @@
         });
         
         function initBackToTopButton() {
-          const backToTopButton = document.querySelector('.back-to-top');
-          
-          if (!backToTopButton) return;
+            const backToTopButton = document.querySelector('.back-to-top');
         
-          // Show/hide button based on scroll position
-          function toggleBackToTopButton() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            
-            // Show button when user has scrolled down more than one screen height
-            // and is not at the very bottom of the page
-            if (scrollTop > windowHeight && (scrollTop + windowHeight) < documentHeight - 100) {
-              backToTopButton.classList.add('show');
-            } else {
-              backToTopButton.classList.remove('show');
+            if (!backToTopButton) return;
+        
+            // Show/hide button based on scroll position
+            function toggleBackToTopButton() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+        
+                // Show button when user has scrolled down more than one screen height
+                // and is not at the very bottom of the page
+                if (scrollTop > windowHeight && (scrollTop + windowHeight) < documentHeight - 100) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
             }
-          }
         
-          // Smooth scroll to top
-          function scrollToTop() {
-            window.scrollTo({
-              top: 0,
-              behavior: 'smooth'
-            });
-          }
+            // Smooth scroll to top
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
         
-          // Event listeners
-          window.addEventListener('scroll', toggleBackToTopButton);
-          backToTopButton.addEventListener('click', scrollToTop);
-          
-          // Initial check
-          toggleBackToTopButton();
+            // Event listeners
+            window.addEventListener('scroll', toggleBackToTopButton);
+            backToTopButton.addEventListener('click', scrollToTop);
+        
+            // Initial check
+            toggleBackToTopButton();
         }
         
         // Initialize back to top button when page loads
         document.addEventListener('DOMContentLoaded', function() {
-          initBackToTopButton();
+            initBackToTopButton();
         });
         
         // Fallback for older browsers
         window.addEventListener('load', function() {
-          initBackToTopButton();
+            initBackToTopButton();
         });
     </script>
 </body>

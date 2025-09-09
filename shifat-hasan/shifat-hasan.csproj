@@ -239,6 +239,20 @@
         <Compile Include="Pages\Contact.aspx.designer.cs">
             <DependentUpon>Contact.aspx</DependentUpon>
         </Compile>
+        <Content Include="Scripts\AdminInfo.js" />
+        <Content Include="Scripts\Contact.js" />
+        <Content Include="Scripts\Home.js" />
+        <Content Include="Scripts\Login.js" />
+        <Content Include="Scripts\Projects.js" />
+        <Content Include="Scripts\ShowcaseList.js" />
+        <Content Include="Scripts\UserFeedbacks.js" />
+        <Content Include="Styles\AdminInfo.css" />
+        <Content Include="Styles\Contact.css" />
+        <Content Include="Styles\Home.css" />
+        <Content Include="Styles\Login.css" />
+        <Content Include="Styles\Projects.css" />
+        <Content Include="Styles\ShowcaseList.css" />
+        <Content Include="Styles\UserFeedbacks.css" />
         <Content Include="Web.config" />
     </ItemGroup>
     <ItemGroup>

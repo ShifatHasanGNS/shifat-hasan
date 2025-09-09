@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.UI;
-using Newtonsoft.Json;
 
 namespace shifat_hasan.Pages
 {
