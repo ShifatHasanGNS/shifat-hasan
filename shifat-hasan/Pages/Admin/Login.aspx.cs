@@ -9,19 +9,16 @@ namespace shifat_hasan.Pages.Admin
     public partial class Login : Page
     {
         private const string AuthCookieName = "AdminAuth";
-        private const string RememberMeCookieName = "RememberAdmin";
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (IsPostBack) return;
 
-            // Check if admin is already authenticated via cookie or session
             if (IsAuthenticated())
             {
                 Response.Redirect("~/Pages/Admin/Dashboard/AdminInfo.aspx");
             }
 
-            // Handle query string messages
             var msg = Request.QueryString["msg"];
             switch (msg)
             {
@@ -53,19 +50,13 @@ namespace shifat_hasan.Pages.Admin
 
             if (id == adminId && passkey == adminPasskey)
             {
-                // Set up authentication with both session and persistent cookie
                 SetupAdminAuthentication();
-
-                // Clear form fields
                 txtAdminId.Text = "";
                 txtPasskey.Text = "";
-
-                // Redirect to dashboard
                 Response.Redirect("~/Pages/Admin/Dashboard/AdminInfo.aspx");
             }
             else
             {
-                // Clear form fields for security
                 txtAdminId.Text = "";
                 txtPasskey.Text = "";
                 ShowMessage("Invalid Admin ID or Passkey.", "error");
@@ -75,27 +66,18 @@ namespace shifat_hasan.Pages.Admin
         private void SetupAdminAuthentication()
         {
             var adminId = System.Configuration.ConfigurationManager.AppSettings["AdminId"];
-
-            // Set up session variables
             Session["IsAdminAuthenticated"] = true;
             Session["AdminId"] = adminId;
             Session["LoginTime"] = DateTime.Now;
-
-            // Set session timeout
             var timeoutStr = System.Configuration.ConfigurationManager.AppSettings["SessionTimeoutMinutes"];
             Session.Timeout = string.IsNullOrEmpty(timeoutStr) ? 30 : int.Parse(timeoutStr);
-
-            // Create persistent authentication cookie
             CreateAuthenticationCookie(adminId);
-
-            // Try to get additional info from database
             try
             {
                 UpdateDatabaseAndGetInfo();
             }
             catch
             {
-                // If database operations fail, continue with defaults
                 Session["AdminName"] = "Administrator";
                 Session["AdminEmail"] = "";
                 Session["SignInCount"] = 1;
@@ -104,30 +86,25 @@ namespace shifat_hasan.Pages.Admin
 
         private void CreateAuthenticationCookie(string adminId)
         {
-            // Create authentication ticket
             var authTicket = new FormsAuthenticationTicket(
-                1, // version
-                adminId, // username
+                1,
+                adminId,
                 DateTime.Now, // issue time
                 DateTime.Now.AddDays(30), // expiration (30 days)
-                true, // persistent
-                "Admin", // user data
+                true,
+                "Admin",
                 FormsAuthentication.FormsCookiePath
             );
 
-            // Encrypt the ticket
             var encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
-            // Create the cookie
             var authCookie = new HttpCookie(AuthCookieName, encryptedTicket)
             {
                 Expires = DateTime.Now.AddDays(30), // Cookie expires in 30 days
                 HttpOnly = true, // Prevent XSS attacks
-                Secure = Request.IsSecureConnection, // Use HTTPS if available
-                SameSite = SameSiteMode.Lax // CSRF protection
+                Secure = Request.IsSecureConnection // Use HTTPS if available
             };
 
-            // Add the cookie to response
             Response.Cookies.Add(authCookie);
         }
 
@@ -138,7 +115,6 @@ namespace shifat_hasan.Pages.Admin
 
             if (string.IsNullOrEmpty(connectionString))
             {
-                // No database configured, use defaults
                 Session["AdminName"] = "Administrator";
                 Session["AdminEmail"] = "";
                 Session["SignInCount"] = 1;
@@ -148,7 +124,6 @@ namespace shifat_hasan.Pages.Admin
             using var conn = new SqlConnection(connectionString);
             conn.Open();
 
-            // Get current admin data
             const string selectQuery = "SELECT name, email, signed_in_count FROM [admin]";
             var adminName = "Administrator";
             var adminEmail = "";
@@ -167,7 +142,6 @@ namespace shifat_hasan.Pages.Admin
                 }
             }
 
-            // Update database
             const string updateQuery =
                 "UPDATE [admin] SET is_signed_in = 1, signed_in_count = @newCount, last_login = @loginTime";
             using (var updateCmd = new SqlCommand(updateQuery, conn))
@@ -177,7 +151,6 @@ namespace shifat_hasan.Pages.Admin
                 updateCmd.ExecuteNonQuery();
             }
 
-            // Set session variables
             Session["AdminName"] = adminName;
             Session["AdminEmail"] = adminEmail;
             Session["SignInCount"] = currentCount + 1;
@@ -185,7 +158,6 @@ namespace shifat_hasan.Pages.Admin
 
         private bool IsAuthenticated()
         {
-            // First check session (for current browser session)
             if (Session["IsAdminAuthenticated"] != null &&
                 (bool)Session["IsAdminAuthenticated"] &&
                 !IsSessionExpired())
@@ -193,7 +165,6 @@ namespace shifat_hasan.Pages.Admin
                 return true;
             }
 
-            // If session is not valid, check authentication cookie
             return ValidateAuthenticationCookie();
         }
 
@@ -205,16 +176,13 @@ namespace shifat_hasan.Pages.Admin
 
             try
             {
-                // Decrypt the authentication ticket
                 var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 if (authTicket == null || authTicket.Expired)
                 {
-                    // Cookie is invalid or expired, remove it
                     RemoveAuthenticationCookie();
                     return false;
                 }
 
-                // Validate the admin ID
                 var configAdminId = System.Configuration.ConfigurationManager.AppSettings["AdminId"];
                 if (authTicket.Name != configAdminId)
                 {
@@ -222,13 +190,11 @@ namespace shifat_hasan.Pages.Admin
                     return false;
                 }
 
-                // Cookie is valid, restore session data
                 RestoreSessionFromCookie(authTicket);
                 return true;
             }
             catch
             {
-                // Cookie is corrupted, remove it
                 RemoveAuthenticationCookie();
                 return false;
             }
@@ -236,23 +202,19 @@ namespace shifat_hasan.Pages.Admin
 
         private void RestoreSessionFromCookie(FormsAuthenticationTicket authTicket)
         {
-            // Restore session variables from cookie authentication
             Session["IsAdminAuthenticated"] = true;
             Session["AdminId"] = authTicket.Name;
             Session["LoginTime"] = DateTime.Now; // Reset login time for session timeout
 
-            // Set session timeout
             var timeoutStr = System.Configuration.ConfigurationManager.AppSettings["SessionTimeoutMinutes"];
             Session.Timeout = string.IsNullOrEmpty(timeoutStr) ? 30 : int.Parse(timeoutStr);
 
-            // Try to get additional info from database
             try
             {
                 RestoreAdditionalSessionData();
             }
             catch
             {
-                // If database operations fail, use defaults
                 Session["AdminName"] = "Administrator";
                 Session["AdminEmail"] = "";
                 Session["SignInCount"] = 1;
@@ -299,8 +261,7 @@ namespace shifat_hasan.Pages.Admin
             {
                 Expires = DateTime.Now.AddDays(-1), // Set to past date to delete
                 HttpOnly = true,
-                Secure = Request.IsSecureConnection,
-                SameSite = SameSiteMode.Lax
+                Secure = Request.IsSecureConnection
             };
             Response.Cookies.Add(expiredCookie);
         }
@@ -316,7 +277,6 @@ namespace shifat_hasan.Pages.Admin
             return DateTime.Now.Subtract(loginTime).TotalMinutes > timeoutMinutes;
         }
 
-        // Static methods for use in other pages
         public static bool RequireAuthentication()
         {
             var context = System.Web.HttpContext.Current;
@@ -330,7 +290,6 @@ namespace shifat_hasan.Pages.Admin
                 return true;
             }
 
-            // Check authentication cookie
             if (ValidateAuthenticationCookieStatic())
             {
                 return true;
@@ -377,7 +336,6 @@ namespace shifat_hasan.Pages.Admin
                     return false;
                 }
 
-                // Restore session from cookie
                 RestoreSessionFromCookieStatic(authTicket);
                 return true;
             }
@@ -453,8 +411,7 @@ namespace shifat_hasan.Pages.Admin
             {
                 Expires = DateTime.Now.AddDays(-1),
                 HttpOnly = true,
-                Secure = context.Request.IsSecureConnection,
-                SameSite = SameSiteMode.Lax
+                Secure = context.Request.IsSecureConnection
             };
             context.Response.Cookies.Add(expiredCookie);
         }
@@ -462,8 +419,6 @@ namespace shifat_hasan.Pages.Admin
         public static void Logout()
         {
             var context = System.Web.HttpContext.Current;
-
-            // Update database
             try
             {
                 string connectionString = System.Configuration.ConfigurationManager

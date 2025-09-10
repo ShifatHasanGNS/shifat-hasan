@@ -143,32 +143,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
 
         protected void btnSignOut_Click(object sender, EventArgs e)
         {
-            // Update database to set is_signed_in = false
-            try
-            {
-                var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"]?.ConnectionString;
-                if (!string.IsNullOrEmpty(connectionString))
-                {
-                    using var conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    const string query = "UPDATE [admin] SET is_signed_in = 0 WHERE is_signed_in = 1";
-                    using var cmd = new SqlCommand(query, conn);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log error but continue with logout
-                System.Diagnostics.Debug.WriteLine($"Database update failed during sign out: {ex.Message}");
-            }
-
-            // Clear session
-            Session.Clear();
-            Session.Abandon();
-
-            // Redirect to login page with success message
-            Response.Redirect("~/Pages/Admin/Login.aspx?msg=signout", false);
-            Context.ApplicationInstance.CompleteRequest();
+            Login.Logout();
         }
 
         private void LoadAdminInfo()
