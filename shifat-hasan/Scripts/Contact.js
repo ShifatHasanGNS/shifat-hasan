@@ -1,3 +1,4 @@
+// Contact.js
 function showFieldError(fieldId, message) {
     var field = document.getElementById(fieldId);
     if (field) {
@@ -42,4 +43,67 @@ function setLoadingState(button, isLoading) {
             button.innerHTML = 'Send Message';
         }
     }
+}
+
+// Add this function to handle form validation
+function validateForm() {
+    // Get the actual client IDs of the controls
+    var name = document.getElementById('<%= txtName.ClientID %>');
+    var email = document.getElementById('<%= txtEmail.ClientID %>');
+    var subject = document.getElementById('<%= txtSubject.ClientID %>');
+    var message = document.getElementById('<%= txtMessage.ClientID %>');
+
+    if (!name || !email || !subject || !message) {
+        console.error("Form elements not found");
+        return false;
+    }
+
+    var nameValue = name.value.trim();
+    var emailValue = email.value.trim();
+    var subjectValue = subject.value.trim();
+    var messageValue = message.value.trim();
+
+    // Clear previous error styles
+    resetFormStyles();
+
+    var hasError = false;
+
+    if (!nameValue) {
+        showFieldError(name.id, 'Name is required');
+        hasError = true;
+    }
+
+    if (!emailValue) {
+        showFieldError(email.id, 'Email is required');
+        hasError = true;
+    } else {
+        // Basic email validation
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(emailValue)) {
+            showFieldError(email.id, 'Please enter a valid email address');
+            hasError = true;
+        }
+    }
+
+    if (!subjectValue) {
+        showFieldError(subject.id, 'Subject is required');
+        hasError = true;
+    }
+
+    if (!messageValue) {
+        showFieldError(message.id, 'Message is required');
+        hasError = true;
+    }
+
+    if (hasError) {
+        return false;
+    }
+
+    // Show loading state
+    var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
+    if (submitButton) {
+        setLoadingState(submitButton, true);
+    }
+
+    return true;
 }

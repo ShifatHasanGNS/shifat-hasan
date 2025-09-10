@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Net;
 using System.Net.Mail;
-using System.Web.UI;
 
 namespace shifat_hasan.Pages
 {
@@ -21,29 +20,63 @@ namespace shifat_hasan.Pages
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            if (ValidateForm())
+            try
             {
-                try
+                if (ValidateForm())
                 {
+                    // Create models from form data
+                    UserModel user = new UserModel
+                    {
+                        Email = txtEmail.Text.Trim(),
+                        Name = txtName.Text.Trim()
+                    };
+
+                    ContactModel contact = new ContactModel
+                    {
+                        UserEmail = txtEmail.Text.Trim(),
+                        UserName = txtName.Text.Trim(),
+                        MessageTitle = txtSubject.Text.Trim(),
+                        MessageBody = txtMessage.Text.Trim(),
+                        DateTimeUserFeedback = DateTime.Now
+                    };
+
                     // First, ensure user exists in user table
-                    EnsureUserExists();
+                    EnsureUserExists(user);
 
                     // Then save the contact message
-                    SaveContactMessage();
+                    SaveContactMessage(contact);
 
                     // Send notification email to admin (optional)
-                    SendNotificationEmail();
+                    SendNotificationEmail(contact);
 
                     // Clear the form and show success message
                     ClearForm();
                     ShowSuccessMessage();
                 }
-                catch (Exception ex)
-                {
-                    ShowErrorMessage("An error occurred while processing your message: " + ex.Message);
-                    System.Diagnostics.Debug.WriteLine($"Contact form error: {ex.Message}");
-                }
             }
+            catch (Exception ex)
+            {
+                // Reset button state on error
+                ResetButtonState();
+                ShowErrorMessage("An error occurred while processing your message: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"Contact form error: {ex.Message}");
+            }
+        }
+
+        private void ResetButtonState()
+        {
+            // This will be called from JavaScript after page loads
+            string script = @"
+                setTimeout(function() {
+                    var submitButton = document.getElementById('" + btnSubmit.ClientID + @"');
+                    if (submitButton) {
+                        submitButton.classList.remove('loading');
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = 'Send Message';
+                    }
+                }, 100);
+            ";
+            ClientScript.RegisterStartupScript(this.GetType(), "ResetButton", script, true);
         }
 
         private bool ValidateForm()
@@ -88,7 +121,7 @@ namespace shifat_hasan.Pages
                 isValid = false;
             }
 
-            if (txtMessage.Text.Trim().Length > 4000) // NTEXT can handle more, but let's set a reasonable limit
+            if (txtMessage.Text.Trim().Length > 4000)
             {
                 errorMessage += "Message must be less than 4000 characters. ";
                 isValid = false;
@@ -115,11 +148,8 @@ namespace shifat_hasan.Pages
             }
         }
 
-        private void EnsureUserExists()
+        private void EnsureUserExists(UserModel user)
         {
-            string userEmail = txtEmail.Text.Trim();
-            string userName = txtName.Text.Trim();
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -130,7 +160,7 @@ namespace shifat_hasan.Pages
                     string checkQuery = "SELECT COUNT(*) FROM [user] WHERE user_email = @email";
                     using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
                     {
-                        checkCmd.Parameters.AddWithValue("@email", userEmail);
+                        checkCmd.Parameters.AddWithValue("@email", user.Email);
                         int userExists = (int)checkCmd.ExecuteScalar();
 
                         if (userExists == 0)
@@ -140,8 +170,8 @@ namespace shifat_hasan.Pages
                                 "INSERT INTO [user] (user_email, user_name) VALUES (@email, @name)";
                             using (SqlCommand insertCmd = new SqlCommand(insertUserQuery, conn))
                             {
-                                insertCmd.Parameters.AddWithValue("@email", userEmail);
-                                insertCmd.Parameters.AddWithValue("@name", userName);
+                                insertCmd.Parameters.AddWithValue("@email", user.Email);
+                                insertCmd.Parameters.AddWithValue("@name", user.Name);
                                 insertCmd.ExecuteNonQuery();
                             }
                         }
@@ -151,105 +181,53 @@ namespace shifat_hasan.Pages
                             string updateUserQuery = "UPDATE [user] SET user_name = @name WHERE user_email = @email";
                             using (SqlCommand updateCmd = new SqlCommand(updateUserQuery, conn))
                             {
-                                updateCmd.Parameters.AddWithValue("@email", userEmail);
-                                updateCmd.Parameters.AddWithValue("@name", userName);
+                                updateCmd.Parameters.AddWithValue("@email", user.Email);
+                                updateCmd.Parameters.AddWithValue("@name", user.Name);
                                 updateCmd.ExecuteNonQuery();
                             }
                         }
                     }
                 }
             }
-            catch (SqlException sqlEx)
+            catch (Exception ex)
             {
-                if (sqlEx.Number == 2627) // Unique constraint violation
-                {
-                    // This should be rare since we check first, but handle gracefully
-                    System.Diagnostics.Debug.WriteLine($"User already exists: {userEmail}");
-                }
-                else
-                {
-                    throw; // Re-throw other SQL exceptions
-                }
+                System.Diagnostics.Debug.WriteLine($"Error ensuring user exists: {ex.Message}");
+                throw;
             }
         }
 
-        private void SaveContactMessage()
+        private void SaveContactMessage(ContactModel contact)
         {
-            string userEmail = txtEmail.Text.Trim();
-            string userName = txtName.Text.Trim();
-            string messageTitle = txtSubject.Text.Trim();
-            string messageBody = txtMessage.Text.Trim();
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    // Check if a contact record already exists for this email
-                    string checkContactQuery = "SELECT COUNT(*) FROM [contact] WHERE user_email = @email";
-                    using (SqlCommand checkCmd = new SqlCommand(checkContactQuery, conn))
+                    conn.Open();
+                    
+                    // Insert new contact record
+                    string insertQuery = @"INSERT INTO [contact] 
+                                         (user_email, user_name, user_message_title, user_message_body, datetime_user_feedback)
+                                         VALUES (@email, @name, @title, @body, @datetime)";
+
+                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
                     {
-                        checkCmd.Parameters.AddWithValue("@email", userEmail);
-                        conn.Open();
-                        int contactExists = (int)checkCmd.ExecuteScalar();
-
-                        if (contactExists > 0)
-                        {
-                            // Update existing contact record
-                            string updateQuery = @"UPDATE [contact] SET 
-                                                 user_name = @name,
-                                                 user_message_title = @title,
-                                                 user_message_body = @body,
-                                                 datetime_user_feedback = @datetime,
-                                                 admin_message_title = NULL,
-                                                 admin_message_body = NULL,
-                                                 datetime_admin_reply = NULL
-                                                 WHERE user_email = @email";
-
-                            using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
-                            {
-                                updateCmd.Parameters.AddWithValue("@email", userEmail);
-                                updateCmd.Parameters.AddWithValue("@name", userName);
-                                updateCmd.Parameters.AddWithValue("@title", messageTitle);
-                                updateCmd.Parameters.AddWithValue("@body", messageBody);
-                                updateCmd.Parameters.AddWithValue("@datetime", DateTime.Now);
-                                updateCmd.ExecuteNonQuery();
-                            }
-                        }
-                        else
-                        {
-                            // Insert new contact record
-                            string insertQuery = @"INSERT INTO [contact] 
-                                                 (user_email, user_name, user_message_title, user_message_body, datetime_user_feedback)
-                                                 VALUES (@email, @name, @title, @body, @datetime)";
-
-                            using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
-                            {
-                                insertCmd.Parameters.AddWithValue("@email", userEmail);
-                                insertCmd.Parameters.AddWithValue("@name", userName);
-                                insertCmd.Parameters.AddWithValue("@title", messageTitle);
-                                insertCmd.Parameters.AddWithValue("@body", messageBody);
-                                insertCmd.Parameters.AddWithValue("@datetime", DateTime.Now);
-                                insertCmd.ExecuteNonQuery();
-                            }
-                        }
+                        insertCmd.Parameters.AddWithValue("@email", contact.UserEmail);
+                        insertCmd.Parameters.AddWithValue("@name", contact.UserName);
+                        insertCmd.Parameters.AddWithValue("@title", contact.MessageTitle);
+                        insertCmd.Parameters.AddWithValue("@body", contact.MessageBody);
+                        insertCmd.Parameters.AddWithValue("@datetime", contact.DateTimeUserFeedback);
+                        insertCmd.ExecuteNonQuery();
                     }
                 }
             }
-            catch (SqlException sqlEx)
+            catch (Exception ex)
             {
-                if (sqlEx.Number == 2627) // Unique constraint violation
-                {
-                    throw new Exception(
-                        "A message from this email address already exists. Please wait for a response before sending another message.");
-                }
-                else
-                {
-                    throw new Exception("Database error occurred while saving your message. Please try again later.");
-                }
+                System.Diagnostics.Debug.WriteLine($"Error saving contact message: {ex.Message}");
+                throw;
             }
         }
 
-        private void SendNotificationEmail()
+        private void SendNotificationEmail(ContactModel contact)
         {
             // This method sends a notification to admin about new contact message
             try
@@ -275,7 +253,7 @@ namespace shifat_hasan.Pages
                 using (var message = new MailMessage())
                 {
                     message.From = new MailAddress(fromEmail, "Portfolio Website");
-                    message.Subject = $"New Contact Message: {txtSubject.Text.Trim()}";
+                    message.Subject = $"New Contact Message: {contact.MessageTitle}";
                     message.To.Add(new MailAddress(adminEmail));
 
                     var htmlBody = $@"
@@ -286,15 +264,15 @@ namespace shifat_hasan.Pages
                                 <h2 style='color: #2c5aa0; border-bottom: 2px solid #2c5aa0; padding-bottom: 10px;'>New Contact Message</h2>
                                 
                                 <div style='background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0;'>
-                                    <p><strong>From:</strong> {txtName.Text.Trim()}</p>
-                                    <p><strong>Email:</strong> {txtEmail.Text.Trim()}</p>
-                                    <p><strong>Subject:</strong> {txtSubject.Text.Trim()}</p>
-                                    <p><strong>Date:</strong> {DateTime.Now:MMM dd, yyyy HH:mm}</p>
+                                    <p><strong>From:</strong> {contact.UserName}</p>
+                                    <p><strong>Email:</strong> {contact.UserEmail}</p>
+                                    <p><strong>Subject:</strong> {contact.MessageTitle}</p>
+                                    <p><strong>Date:</strong> {contact.DateTimeUserFeedback:MMM dd, yyyy HH:mm}</p>
                                 </div>
                                 
                                 <div style='background-color: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 5px;'>
                                     <h3 style='margin-top: 0;'>Message:</h3>
-                                    <p>{txtMessage.Text.Trim().Replace("\n", "<br/>")}</p>
+                                    <p>{contact.MessageBody.Replace("\n", "<br/>")}</p>
                                 </div>
                                 
                                 <div style='margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color: #888;'>
@@ -340,6 +318,13 @@ namespace shifat_hasan.Pages
         {
             string script = @"
                 alert('Thank you for your message! We have received your feedback and will get back to you soon.');
+                // Reset button state
+                var submitButton = document.getElementById('" + btnSubmit.ClientID + @"');
+                if (submitButton) {
+                    submitButton.classList.remove('loading');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Send Message';
+                }
             ";
             ClientScript.RegisterStartupScript(this.GetType(), "SuccessMessage", script, true);
         }
@@ -348,8 +333,41 @@ namespace shifat_hasan.Pages
         {
             string script = $@"
                 alert('Error: {message.Replace("'", "\\'")}');
+                // Reset button state
+                var submitButton = document.getElementById('" + btnSubmit.ClientID + @"');
+                if (submitButton) {
+                    submitButton.classList.remove('loading');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Send Message';
+                }
             ";
             ClientScript.RegisterStartupScript(this.GetType(), "ErrorMessage", script, true);
         }
+    }
+
+    // User model class
+    public class UserModel
+    {
+        public string Email { get; set; }
+        public string Name { get; set; }
+        
+        public string user_email => Email;
+        public string user_name => Name;
+    }
+
+    // Contact model class
+    public class ContactModel
+    {
+        public string UserEmail { get; set; }
+        public string UserName { get; set; }
+        public string MessageTitle { get; set; }
+        public string MessageBody { get; set; }
+        public DateTime DateTimeUserFeedback { get; set; }
+        
+        public string user_email => UserEmail;
+        public string user_name => UserName;
+        public string user_message_title => MessageTitle;
+        public string user_message_body => MessageBody;
+        public DateTime datetime_user_feedback => DateTimeUserFeedback;
     }
 }

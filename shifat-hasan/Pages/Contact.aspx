@@ -124,103 +124,131 @@
     </div>
     
     <script type="text/javascript">
-        function validateForm() {
-            // Get the actual client IDs of the controls
-            var name = document.getElementById('<%= txtName.ClientID %>').value.trim();
-            var email = document.getElementById('<%= txtEmail.ClientID %>').value.trim();
-            var subject = document.getElementById('<%= txtSubject.ClientID %>').value.trim();
-            var message = document.getElementById('<%= txtMessage.ClientID %>').value.trim();
+    function validateForm() {
+        // Get the actual client IDs of the controls
+        var name = document.getElementById('<%= txtName.ClientID %>');
+        var email = document.getElementById('<%= txtEmail.ClientID %>');
+        var subject = document.getElementById('<%= txtSubject.ClientID %>');
+        var message = document.getElementById('<%= txtMessage.ClientID %>');
 
-            // Clear previous error styles
-            clearErrorStyles();
-
-            var hasError = false;
-
-            if (!name) {
-                showFieldError('<%= txtName.ClientID %>', 'Name is required');
-                hasError = true;
-            }
-
-            if (!email) {
-                showFieldError('<%= txtEmail.ClientID %>', 'Email is required');
-                hasError = true;
-            } else {
-                // Basic email validation
-                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailPattern.test(email)) {
-                    showFieldError('<%= txtEmail.ClientID %>', 'Please enter a valid email address');
-                    hasError = true;
-                }
-            }
-
-            if (!subject) {
-                showFieldError('<%= txtSubject.ClientID %>', 'Subject is required');
-                hasError = true;
-            }
-
-            if (!message) {
-                showFieldError('<%= txtMessage.ClientID %>', 'Message is required');
-                hasError = true;
-            }
-
-            if (hasError) {
-                return false;
-            }
-
-            // Show loading state
-            var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
-            if (submitButton) {
-                submitButton.classList.add('loading');
-                submitButton.disabled = true;
-                submitButton.innerHTML = 'Sending...';
-            }
-
-            return true;
+        if (!name || !email || !subject || !message) {
+            console.error("Form elements not found");
+            return false;
         }
 
-        function clearErrorStyles() {
-            // Remove all error messages
-            var errorMessages = document.querySelectorAll('.field-error');
-            errorMessages.forEach(function(error) {
-                error.remove();
-            });
+        var nameValue = name.value.trim();
+        var emailValue = email.value.trim();
+        var subjectValue = subject.value.trim();
+        var messageValue = message.value.trim();
 
-            // Reset field styles
-            var fields = [
-                document.getElementById('<%= txtName.ClientID %>'),
-                document.getElementById('<%= txtEmail.ClientID %>'),
-                document.getElementById('<%= txtSubject.ClientID %>'),
-                document.getElementById('<%= txtMessage.ClientID %>')
-            ];
+        // Clear previous error styles
+        clearErrorStyles();
 
-            fields.forEach(function(field) {
-                if (field) {
-                    field.style.borderColor = '';
-                    field.style.boxShadow = '';
-                }
-            });
+        var hasError = false;
+
+        if (!nameValue) {
+            showFieldError(name.id, 'Name is required');
+            hasError = true;
         }
 
-        // Initialize form enhancements
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add placeholders
-            var nameField = document.getElementById('<%= txtName.ClientID %>');
-            var emailField = document.getElementById('<%= txtEmail.ClientID %>');
-            var subjectField = document.getElementById('<%= txtSubject.ClientID %>');
-            var messageField = document.getElementById('<%= txtMessage.ClientID %>');
+        if (!emailValue) {
+            showFieldError(email.id, 'Email is required');
+            hasError = true;
+        } else {
+            // Basic email validation
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailValue)) {
+                showFieldError(email.id, 'Please enter a valid email address');
+                hasError = true;
+            }
+        }
 
-            if (nameField) nameField.placeholder = 'Enter your full name';
-            if (emailField) emailField.placeholder = 'your.email@example.com';
-            if (subjectField) subjectField.placeholder = 'What is this about?';
-            if (messageField) messageField.placeholder = 'Tell me about your project, question, or how I can help you...';
+        if (!subjectValue) {
+            showFieldError(subject.id, 'Subject is required');
+            hasError = true;
+        }
 
-            // Clear loading state on page load (in case of postback)
-            var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
-            if (submitButton) {
-                submitButton.classList.remove('loading');
-                submitButton.disabled = false;
-                submitButton.innerHTML = 'Send Message';
+        if (!messageValue) {
+            showFieldError(message.id, 'Message is required');
+            hasError = true;
+        }
+
+        if (hasError) {
+            return false;
+        }
+
+        // Show loading state
+        var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
+        if (submitButton) {
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Sending...';
+        }
+
+        return true;
+    }
+
+    function clearErrorStyles() {
+        // Remove all error messages
+        var errorMessages = document.querySelectorAll('.field-error');
+        errorMessages.forEach(function(error) {
+            error.remove();
+        });
+
+        // Reset field styles
+        var fields = [
+            document.getElementById('<%= txtName.ClientID %>'),
+            document.getElementById('<%= txtEmail.ClientID %>'),
+            document.getElementById('<%= txtSubject.ClientID %>'),
+            document.getElementById('<%= txtMessage.ClientID %>')
+        ];
+
+        fields.forEach(function(field) {
+            if (field) {
+                field.style.borderColor = '';
+                field.style.boxShadow = '';
             }
         });
-    </script>
+    }
+
+    // Initialize form enhancements
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add placeholders
+        var nameField = document.getElementById('<%= txtName.ClientID %>');
+        var emailField = document.getElementById('<%= txtEmail.ClientID %>');
+        var subjectField = document.getElementById('<%= txtSubject.ClientID %>');
+        var messageField = document.getElementById('<%= txtMessage.ClientID %>');
+
+        if (nameField) nameField.placeholder = 'Enter your full name';
+        if (emailField) emailField.placeholder = 'your.email@example.com';
+        if (subjectField) subjectField.placeholder = 'What is this about?';
+        if (messageField) messageField.placeholder = 'Tell me about your project, question, or how I can help you...';
+
+        // Clear loading state on page load (in case of postback)
+        var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
+        if (submitButton) {
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Send Message';
+        }
+        
+        // Add event listener to handle server-side validation errors
+        if (typeof Page_ClientValidate === 'function') {
+            var originalValidation = Page_ClientValidate;
+            Page_ClientValidate = function(validationGroup) {
+                var isValid = originalValidation(validationGroup);
+                if (!isValid) {
+                    // Reset button state if validation fails
+                    var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
+                    if (submitButton) {
+                        submitButton.classList.remove('loading');
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = 'Send Message';
+                    }
+                }
+                return isValid;
+            };
+        }
+    });
+</script>
 </asp:Content>
