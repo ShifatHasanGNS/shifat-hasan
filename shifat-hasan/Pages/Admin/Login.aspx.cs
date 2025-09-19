@@ -124,7 +124,9 @@ namespace shifat_hasan.Pages.Admin
             using var conn = new SqlConnection(connectionString);
             conn.Open();
 
-            const string selectQuery = "SELECT name, email, signed_in_count FROM [admin]";
+            // Get current admin info - use same query pattern as AdminInfo.aspx.cs
+            const string selectQuery =
+                "SELECT TOP 1 name, email, signed_in_count FROM [admin] ORDER BY CASE WHEN is_signed_in = 1 THEN 0 ELSE 1 END";
             var adminName = "Administrator";
             var adminEmail = "";
             var currentCount = 0;
@@ -135,20 +137,32 @@ namespace shifat_hasan.Pages.Admin
                 {
                     if (reader.Read())
                     {
-                        adminName = reader["name"]?.ToString() ?? "Administrator";
-                        adminEmail = reader["email"]?.ToString() ?? "";
-                        currentCount = Convert.ToInt32(reader["signed_in_count"] ?? 0);
+                        adminName = reader["name"] == DBNull.Value
+                            ? "Administrator"
+                            : reader["name"]?.ToString() ?? "Administrator";
+                        adminEmail = reader["email"] == DBNull.Value ? "" : reader["email"]?.ToString() ?? "";
+                        currentCount = reader["signed_in_count"] == DBNull.Value
+                            ? 0
+                            : Convert.ToInt32(reader["signed_in_count"]);
                     }
                 }
             }
 
-            const string updateQuery =
-                "UPDATE [admin] SET is_signed_in = 1, signed_in_count = @newCount, last_login = @loginTime";
+            // Update admin record - only update the fields that definitely exist
+            const string updateQuery = @"UPDATE [admin] SET 
+                               is_signed_in = 1, 
+                               signed_in_count = @newCount";
             using (var updateCmd = new SqlCommand(updateQuery, conn))
             {
                 updateCmd.Parameters.AddWithValue("@newCount", currentCount + 1);
-                updateCmd.Parameters.AddWithValue("@loginTime", DateTime.Now);
-                updateCmd.ExecuteNonQuery();
+                var rowsAffected = updateCmd.ExecuteNonQuery();
+
+                System.Diagnostics.Debug.WriteLine($"Admin login update: {rowsAffected} rows affected");
+
+                if (rowsAffected == 0)
+                {
+                    throw new Exception("Failed to update admin login status - no rows affected");
+                }
             }
 
             Session["AdminName"] = adminName;
@@ -428,13 +442,17 @@ namespace shifat_hasan.Pages.Admin
                 {
                     using var conn = new SqlConnection(connectionString);
                     conn.Open();
+
                     const string query = "UPDATE [admin] SET is_signed_in = 0";
                     using var cmd = new SqlCommand(query, conn);
-                    cmd.ExecuteNonQuery();
+                    var rowsAffected = cmd.ExecuteNonQuery();
+
+                    System.Diagnostics.Debug.WriteLine($"Admin logout update: {rowsAffected} rows affected");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Database error during logout: {ex.Message}");
                 // Ignore database errors during logout
             }
 

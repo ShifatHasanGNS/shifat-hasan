@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href='<%= ResolveUrl("~/Styles/Contact.css") %>' />
-    <script type="text/javascript" src='<%= ResolveUrl("~/Scripts/Contact.js") %>'></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -124,131 +123,26 @@
     </div>
     
     <script type="text/javascript">
-    function validateForm() {
-        // Get the actual client IDs of the controls
-        var name = document.getElementById('<%= txtName.ClientID %>');
-        var email = document.getElementById('<%= txtEmail.ClientID %>');
-        var subject = document.getElementById('<%= txtSubject.ClientID %>');
-        var message = document.getElementById('<%= txtMessage.ClientID %>');
-
-        if (!name || !email || !subject || !message) {
-            console.error("Form elements not found");
-            return false;
-        }
-
-        var nameValue = name.value.trim();
-        var emailValue = email.value.trim();
-        var subjectValue = subject.value.trim();
-        var messageValue = message.value.trim();
-
-        // Clear previous error styles
-        clearErrorStyles();
-
-        var hasError = false;
-
-        if (!nameValue) {
-            showFieldError(name.id, 'Name is required');
-            hasError = true;
-        }
-
-        if (!emailValue) {
-            showFieldError(email.id, 'Email is required');
-            hasError = true;
-        } else {
+        function validateForm() {
+            // Get the actual client IDs of the controls
+            var name = document.getElementById('<%= txtName.ClientID %>').value.trim();
+            var email = document.getElementById('<%= txtEmail.ClientID %>').value.trim();
+            var subject = document.getElementById('<%= txtSubject.ClientID %>').value.trim();
+            var message = document.getElementById('<%= txtMessage.ClientID %>').value.trim();
+            
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all fields.');
+                return false;
+            }
+            
             // Basic email validation
             var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(emailValue)) {
-                showFieldError(email.id, 'Please enter a valid email address');
-                hasError = true;
+            if (!emailPattern.test(email)) {
+                alert('Please enter a valid email address.');
+                return false;
             }
+            
+            return true;
         }
-
-        if (!subjectValue) {
-            showFieldError(subject.id, 'Subject is required');
-            hasError = true;
-        }
-
-        if (!messageValue) {
-            showFieldError(message.id, 'Message is required');
-            hasError = true;
-        }
-
-        if (hasError) {
-            return false;
-        }
-
-        // Show loading state
-        var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
-        if (submitButton) {
-            submitButton.classList.add('loading');
-            submitButton.disabled = true;
-            submitButton.innerHTML = 'Sending...';
-        }
-
-        return true;
-    }
-
-    function clearErrorStyles() {
-        // Remove all error messages
-        var errorMessages = document.querySelectorAll('.field-error');
-        errorMessages.forEach(function(error) {
-            error.remove();
-        });
-
-        // Reset field styles
-        var fields = [
-            document.getElementById('<%= txtName.ClientID %>'),
-            document.getElementById('<%= txtEmail.ClientID %>'),
-            document.getElementById('<%= txtSubject.ClientID %>'),
-            document.getElementById('<%= txtMessage.ClientID %>')
-        ];
-
-        fields.forEach(function(field) {
-            if (field) {
-                field.style.borderColor = '';
-                field.style.boxShadow = '';
-            }
-        });
-    }
-
-    // Initialize form enhancements
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add placeholders
-        var nameField = document.getElementById('<%= txtName.ClientID %>');
-        var emailField = document.getElementById('<%= txtEmail.ClientID %>');
-        var subjectField = document.getElementById('<%= txtSubject.ClientID %>');
-        var messageField = document.getElementById('<%= txtMessage.ClientID %>');
-
-        if (nameField) nameField.placeholder = 'Enter your full name';
-        if (emailField) emailField.placeholder = 'your.email@example.com';
-        if (subjectField) subjectField.placeholder = 'What is this about?';
-        if (messageField) messageField.placeholder = 'Tell me about your project, question, or how I can help you...';
-
-        // Clear loading state on page load (in case of postback)
-        var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
-        if (submitButton) {
-            submitButton.classList.remove('loading');
-            submitButton.disabled = false;
-            submitButton.innerHTML = 'Send Message';
-        }
-        
-        // Add event listener to handle server-side validation errors
-        if (typeof Page_ClientValidate === 'function') {
-            var originalValidation = Page_ClientValidate;
-            Page_ClientValidate = function(validationGroup) {
-                var isValid = originalValidation(validationGroup);
-                if (!isValid) {
-                    // Reset button state if validation fails
-                    var submitButton = document.getElementById('<%= btnSubmit.ClientID %>');
-                    if (submitButton) {
-                        submitButton.classList.remove('loading');
-                        submitButton.disabled = false;
-                        submitButton.innerHTML = 'Send Message';
-                    }
-                }
-                return isValid;
-            };
-        }
-    });
-</script>
+    </script>
 </asp:Content>

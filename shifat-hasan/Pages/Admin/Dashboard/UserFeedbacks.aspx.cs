@@ -21,18 +21,17 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                 LoadStatistics();
             }
         }
-        
+
         protected string GetReplyText(object adminMessageBody, object userName)
         {
             if (!string.IsNullOrEmpty(adminMessageBody?.ToString()))
             {
                 return adminMessageBody.ToString();
             }
-    
-            return $"Dear {userName},\n\nThank you for contacting us. We have received your message and appreciate your feedback.\n\n[Your response here]\n\nBest regards,\nAdmin Team";
-        }
 
-        #region Data Loading Methods
+            return
+                $"Dear {userName},\n\nThank you for contacting us. We have received your message and appreciate your feedback.\n\n[Your response here]\n\nBest regards,\nMd. Shifat Hasan";
+        }
 
         private void LoadAllFeedback()
         {
@@ -127,10 +126,6 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             }
         }
 
-        #endregion
-
-        #region Search Methods
-
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             string searchTerm = txtSearch.Text.Trim();
@@ -197,10 +192,6 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             LoadStatistics();
             ShowMessage("Showing all feedback records.", "alert-info");
         }
-
-        #endregion
-
-        #region Feedback Actions
 
         protected void rptFeedback_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
@@ -378,10 +369,6 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             }
         }
 
-        #endregion
-
-        #region Email and Database Operations
-
         private UserDetails GetUserDetails(int contactId)
         {
             try
@@ -448,7 +435,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
 
                 using (var mailMessage = new MailMessage())
                 {
-                    mailMessage.From = new MailAddress(fromEmail, "Admin Team");
+                    mailMessage.From = new MailAddress(fromEmail, "Md. Shifat Hasan");
                     mailMessage.Subject = subject;
                     mailMessage.To.Add(new MailAddress(toEmail, toName));
 
@@ -545,7 +532,7 @@ namespace shifat_hasan.Pages.Admin.Dashboard
                                 This email was sent in response to your feedback. Please do not reply directly to this email.
                             </p>
                             <p style='margin: 10px 0 0 0; font-size: 12px; color: #64748b;'>
-                                &copy; {DateTime.Now.Year} Admin Team. All rights reserved.
+                                &copy; {DateTime.Now.Year} Md. Shifat Hasan. All rights reserved.
                             </p>
                         </div>
                     </div>
@@ -593,10 +580,6 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             }
         }
 
-        #endregion
-
-        #region Helper Methods
-
         private void ShowMessage(string message, string cssClass)
         {
             if (string.IsNullOrEmpty(message))
@@ -623,17 +606,11 @@ namespace shifat_hasan.Pages.Admin.Dashboard
             }
         }
 
-        #endregion
-
-        #region Helper Classes
-
         private class UserDetails
         {
             public string Email { get; set; } = "";
             public string Name { get; set; } = "";
             public string OriginalMessage { get; set; } = "";
         }
-
-        #endregion
     }
 }

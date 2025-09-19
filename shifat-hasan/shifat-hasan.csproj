@@ -179,8 +179,6 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="Database\AddAdmin.sql" />
-        <Content Include="Database\CreateSchema.sql" />
         <Content Include="Global.asax" />
         <Compile Include="Global.asax.cs" />
         <Content Include="Pages\Admin\Login.aspx" />
@@ -240,7 +238,6 @@
             <DependentUpon>Contact.aspx</DependentUpon>
         </Compile>
         <Content Include="Scripts\AdminInfo.js" />
-        <Content Include="Scripts\Contact.js" />
         <Content Include="Scripts\Home.js" />
         <Content Include="Scripts\Login.js" />
         <Content Include="Scripts\Projects.js" />
